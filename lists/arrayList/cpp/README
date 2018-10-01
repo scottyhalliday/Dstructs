@@ -1,0 +1,20 @@
+ARRAYLIST
+By Scott Hall
+
+The ArrayList is a fixed array-based list which can store any data type
+(consistent data type).  This implementation of ArrayList will dynamically
+grow as the list fills.  The growth will always be the double of the list
+size at the time it reaches its full state.  The features implemented for
+this data structure are described below.
+    o  Create the list.  List is initialized to empty state
+    o  Determine whether the list is full
+    o  Determine whether the list is empty
+    o  Find the size of the list
+    o  Destroy/Clear the list
+    o  Determine whether an item is the same as a given list element
+    o  Insert an item in the list at a specified location
+    o  Remove an item from the list at a specified location
+    o  Replace an item at a specified location with another item
+    o  Retrieve an item at a specified location with another item
+    o  Search the list for a given item
+    o  Resize the array
