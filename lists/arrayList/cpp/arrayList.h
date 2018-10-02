@@ -17,6 +17,8 @@ protected:
 
 public:
   ArrayList(int size=100);
+  ArrayList(const ArrayList &cpList);
+ ~ArrayList();
   int getMaxSize() const;	// Recall: const after function declaration means we can call it on any const object while restricting change on class access specifiers
   int getLength() const;
   bool isEmpty() const;
@@ -26,6 +28,7 @@ public:
   void insertAt(int index, int value);
   void print() const;
   bool isItemAtEqual(int index, int value) const;
+  void removeItemAt(int index);
 
 };
 
