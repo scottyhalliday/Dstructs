@@ -9,21 +9,29 @@
 // default size of 100.  The member access specifieds denoted m_*
 // are responsible for storing the maximum ArrayList size and the
 // current ArrayList size.
-ArrayList::ArrayList(int size) {
-  std::cout << "I am in the ArrayList constructor" << std::endl;
+template <class arrayType>
+ArrayList<arrayType>::ArrayList(int size) {
+  std::cout << "Initializing ArrayList for data type '"
+            << typeid(arrayType).name()
+            << "'" << std::endl;
+
   m_maxSize = size;
   m_length  = 0;
-  m_list    = new int[size];
+  m_list    = new arrayType[size];
 }
 
 //-----------------------------------------------------------------------------
 
 // Copy constructor for ArrayList
-ArrayList::ArrayList(const ArrayList &cpList) {
-  std::cout << "*** Copy constructor" << std::endl;
+template <class arrayType>
+ArrayList<arrayType>::ArrayList(const ArrayList<arrayType> &cpList) {
+  std::cout << "Initializing ArrayList for data type '"
+            << typeid(arrayType).name()
+            << "' via Copy Constructor" << std::endl;
+
   m_maxSize = cpList.m_maxSize;
   m_length  = cpList.m_length;
-  m_list    = new int[m_maxSize];
+  m_list    = new arrayType[m_maxSize];
 
   for (int i=0; i<m_length; i++) {
     m_list[i] = cpList.m_list[i];
@@ -33,7 +41,8 @@ ArrayList::ArrayList(const ArrayList &cpList) {
 //-----------------------------------------------------------------------------
 
 // Deallocate the ArrayList when done with it -- Free the memory
-ArrayList::~ArrayList() {
+template <class arrayType>
+ArrayList<arrayType>::~ArrayList() {
   delete[] m_list;
 }
 
@@ -43,7 +52,8 @@ ArrayList::~ArrayList() {
 //
 // This is simply a reference to the declared size of the array at
 // initialization time
-int ArrayList::getMaxSize() const {
+template <class arrayType>
+int ArrayList<arrayType>::getMaxSize() const {
   return m_maxSize;
 }
 
@@ -53,14 +63,16 @@ int ArrayList::getMaxSize() const {
 //
 // Remember that the ArrayList is in sequential order which usese
 // m_length to track where the current ArrayList content ends
-int ArrayList::getLength() const {
+template <class arrayType>
+int ArrayList<arrayType>::getLength() const {
   return m_length;
 }
 
 //-----------------------------------------------------------------------------
 
 // A check to see if the ArrayList is currently empty
-bool ArrayList::isEmpty() const {
+template <class arrayType>
+bool ArrayList<arrayType>::isEmpty() const {
   return (m_length == 0);
 }
 
@@ -69,7 +81,8 @@ bool ArrayList::isEmpty() const {
 // A check to see if the ArrayList is full
 //
 // Cannot add additional items if the ArrayList is full
-bool ArrayList::isFull() const {
+template <class arrayType>
+bool ArrayList<arrayType>::isFull() const {
   return (m_length == m_maxSize);
 }
 
@@ -80,7 +93,8 @@ bool ArrayList::isFull() const {
 // Simply resets the ArrayList length class variable.  Doesn't
 // actually remove items but just resets the m_length index
 // to the beginning of the ArrayList for overwrite.
-void ArrayList::clear() {
+template <class arrayType>
+void ArrayList<arrayType>::clear() {
   m_length = 0;
 }
 
@@ -89,22 +103,20 @@ void ArrayList::clear() {
 // Insert the item at the end of the list
 //
 // Will add the item at the end of the list providing the list isn't full!
-void ArrayList::insertAtEnd(const int value) {
+template <class arrayType>
+void ArrayList<arrayType>::insertAtEnd(const arrayType& value) {
   if (isFull() == 1) {
-    std::cerr << "List is full cannot add more" << std::endl;
+    std::cerr << "*** ERROR ***\nList is full cannot add more" << std::endl;
     return;
   } else if (searchArrayList(value) != -1) {
-      std::cerr << "Value " << value << " already exists in the list.  "
+      std::cerr << "*** ERROR ***\n"
+                   "Value '" << value << "' already exists in the list.  "
                    "Cannot have duplicates.  Not adding value!!!"
                 << std::endl;
       return;
   }
 
   m_list[m_length] = value;
-
-  std::cout << "Adding Value: " << value
-            << " At Index: "    << m_length
-            << std::endl;
 
   // Increase the ArrayList end index tracker by 1
   m_length++;
@@ -117,20 +129,23 @@ void ArrayList::insertAtEnd(const int value) {
 //
 // Inserts the item at the index specified so long as the index is valid and
 // item does not already exist in the ArrayList
-void ArrayList::insertAtIndex(const int index, const int value) {
+template <class arrayType>
+void ArrayList<arrayType>::insertAtIndex(const int index, const arrayType& value) {
   if (index > m_maxSize) {
 
   } if (isFull() == 1) {
-      std::cerr << "List is full cannot add more" << std::endl;
+      std::cerr <<  "*** ERROR ***\nList is full cannot add more" << std::endl;
       return;
   } else if (index > m_length || index < 0) {
-      std::cerr << "Index is outside the range of the current list.  "
+      std::cerr << "*** ERROR ***\n"
+                   "Index is outside the range of the current list.  "
                    "Array length = " << m_length
                 << " and index = "   << index
                 << std::endl;
     return;
   } else if (searchArrayList(value) != -1) {
-      std::cerr << "Value " << value << " already exists in the list.  "
+      std::cerr << "*** ERROR ***\n"
+                   "Value '" << value << "' already exists in the list.  "
                    "Cannot have duplicates.  Not adding value!!!"
                 << std::endl;
       return;
@@ -151,10 +166,12 @@ void ArrayList::insertAtIndex(const int index, const int value) {
 
 // Returns whether the value at the specified index is equal to the value
 // in the ArrayList
-bool ArrayList::isItemAtEqual(const int index, const int value) const {
+template <class arrayType>
+bool ArrayList<arrayType>::isItemAtEqual(const int index, const arrayType& value) const {
 
   if (index > m_length || index < 0) {
-    std::cerr << "Index is outside the range of the current list.  "
+    std::cerr << "*** ERROR ***\n"
+                 "Index is outside the range of the current list.  "
                  "Array length = " << m_length
               << " and index = " << index
               << std::endl;
@@ -171,10 +188,12 @@ bool ArrayList::isItemAtEqual(const int index, const int value) const {
 //
 // Removes the item at the speficied index so long as the index is valid.
 // Once removed the ArrayList is shifted to keep it continuous
-void ArrayList::removeAtIndex(const int index) {
+template <class arrayType>
+void ArrayList<arrayType>::removeAtIndex(const int index) {
 
   if (index > m_length || index < 0) {
-    std::cerr << "Index is outside the range of the current list.  "
+    std::cerr << "*** ERROR ***\n"
+                 "Index is outside the range of the current list.  "
                  "Array length = " << m_length
               << " and index = " << index
               << std::endl;
@@ -196,13 +215,15 @@ void ArrayList::removeAtIndex(const int index) {
 //
 // Removes an item identified if it exists in the ArrayList.  If it does not
 // exist then nothing is removed.
-void ArrayList::remove(const int value) {
+template <class arrayType>
+void ArrayList<arrayType>::remove(const arrayType& value) {
 
   // Get the index where the value to remove is located
   int index = searchArrayList(value);
 
   if (index == -1) {
-    std::cerr << "Value " << value << " is not currently in the list."
+    std::cerr << "*** ERROR ***\n"
+                 "Value '" << value << "' is not currently in the list."
                  "Nothing to delete so doing nothing."
               << std::endl;
     return;
@@ -216,13 +237,35 @@ void ArrayList::remove(const int value) {
   m_length--;
 
 }
+//-----------------------------------------------------------------------------
+
+// Get the item at the specified index
+//
+// If the index is not valid then return an error
+template <class arrayType>
+int ArrayList<arrayType>::getItemAtIndex(const int index, arrayType& value) {
+
+  if (index < 0 || index > m_length) {
+    std::cerr << "*** ERROR ***\n"
+                 "Index is outside the range of the current list.  "
+                 "Array length = " << m_length
+              << " and index = " << index
+              << std::endl;
+    return -1;
+  }
+
+  value = m_list[index];
+  return 0;
+
+}
 
 //-----------------------------------------------------------------------------
 
 // Print the ArrayList items
 //
 // Prints the ArrayList at 10 items per line
-void ArrayList::print() const {
+template <class arrayType>
+void ArrayList<arrayType>::print() const {
 
   std::cout << " Array List Content:" << std::endl;
   for (int i=0; i<m_length; i++) {
@@ -241,7 +284,8 @@ void ArrayList::print() const {
 //
 // Search the ArrayList for the given value and return the index of the match
 // else return -1 to indicate that the value is not currently in the list
-int ArrayList::searchArrayList(const int value) const {
+template <class arrayType>
+int ArrayList<arrayType>::searchArrayList(const arrayType& value) const {
 
   for (int i=0; i<m_length; i++) {
     if (m_list[i] == value) {
@@ -255,32 +299,161 @@ int ArrayList::searchArrayList(const int value) const {
 //-----------------------------------------------------------------------------
 
 int main() {
-  std::cout << "Hello ArrayList" << std::endl;
-  int list2add[] = {1,54,26,7878,56,54,878,2135,24,23,5868,5268,788};
 
-  ArrayList intArray1(15);
+  std::cout << "****************************************************\n"
+            << "*                                                  *\n"
+            << "*         C++ Implementation of ArrayList          *\n"
+            << "*                                                  *\n"
+            << "****************************************************\n"
+            << std::endl;
 
-  for (int i=0; i < 13; i++) {
-    intArray1.insertAtEnd(list2add[i]);
+  // Initialize the ArrayLists
+  ArrayList<int>         intList(10);
+  ArrayList<double>      doubleList;
+  ArrayList<std::string> stringList;
+
+  // Create some data to populate the list
+  int         intInput[10]    = {0,1,2,3,4,5,6,7,8,9};
+  double      doubleInput[10] = {1.2, 2.3, 3.4, 4.5 , 5.6,
+                                 6.7, 7.8, 8.9, 9.10, 10.11};
+  std::string stringInput[10] = {"ab", "bc", "cd", "de", "ef",
+                                 "fg", "gh", "hi", "jk", "kl"};
+  for (int i=0; i<10; i++) {
+    intList.insertAtEnd(intInput[i]);
+    doubleList.insertAtEnd(doubleInput[i]);
+    stringList.insertAtEnd(stringInput[i]);
   }
 
-  intArray1.print();
-  intArray1.insertAtIndex(20,777);
-  intArray1.print();
-  std::cout << "Current list length " << intArray1.getLength() << std::endl;
-  std::cout << "Does they equal " << intArray1.isItemAtEqual(4,54) << std::endl;
-  intArray1.removeAtIndex(1);
-  intArray1.print();
-  ArrayList intArray2(intArray1);
-  intArray2.print();
-  std::cout << " " << std::endl;
-  std::cout << " " << std::endl;
-  intArray1.removeAtIndex(1);
-  intArray1.print();
-  intArray2.print();
-  std::cout << intArray1.searchArrayList(8585858) << std::endl;
-  intArray1.insertAtIndex(3, 878);
-  intArray1.remove(878);
-  intArray1.print();
+  // Print the lists
+  std::cout << "\nInteger ArrayList:" << std::endl;
+  intList.print();
+
+  std::cout << "\nDouble ArrayList:" << std::endl;
+  doubleList.print();
+
+  std::cout << "\nString ArrayList:" << std::endl;
+  stringList.print();
+
+  std::cout << "\n\n ************* INTEGER ARRAYLIST TESTING ***************\n\n";
+
+  std::cout << "\nAttempting to add '10' to integer list.  Should fail "
+            << "since list is already full."
+            << std::endl;
+  intList.insertAtEnd(10);
+
+  // Remove an item from the integer ArrayList
+  std::cout << "\nAttempting to remove item in the third index.  "
+            << "Should succeed."
+            << std::endl;
+  intList.removeAtIndex(3);
+  std::cout << "Current List:" << std::endl;
+  intList.print();
+
+  std::cout << "\nAttempting to add '10' to integer list.  Should work "
+            << "now that there is space for it."
+            << std::endl;
+  intList.insertAtEnd(10);
+  std::cout << "Current List:" << std::endl;
+  intList.print();
+
+  std::cout << "\nAttempting to remove item label '6' from integer list.  "
+            << "Should work "
+            << std::endl;
+  intList.remove(6);
+  std::cout << "Current List:" << std::endl;
+  intList.print();
+
+  std::cout << "\nClear the list"
+            << std::endl;
+  intList.clear();
+  std::cout << "Current List:" << std::endl;
+  intList.print();
+
+  std::cout << "\n\n ************* DOUBLE ARRAYLIST TESTING ***************\n\n";
+
+  std::cout << "\nAttempting to add '100.9' to integer list.  Should work "
+            << std::endl;
+  doubleList.insertAtEnd(100.9);
+  std::cout << "Current List:" << std::endl;
+  doubleList.print();
+
+  // Remove an item from the integer ArrayList
+  std::cout << "\nAttempting to remove item in the 30 index.  "
+            << "Should fail since nothing is there."
+            << std::endl;
+  doubleList.removeAtIndex(30);
+  std::cout << "Current List:" << std::endl;
+  doubleList.print();
+
+  std::cout << "\nAttempting to add '1009.85' to integer list at index 9.  "
+            << "Should work."
+            << std::endl;
+  doubleList.insertAtIndex(9, 1009.85);
+  std::cout << "Current List:" << std::endl;
+  doubleList.print();
+
+  std::cout << "\nAttempting to remove item label '7.8' from integer list.  "
+            << "Should work "
+            << std::endl;
+  doubleList.remove(7.8);
+  std::cout << "Current List:" << std::endl;
+  doubleList.print();
+
+  std::cout << "\nClear the list"
+            << std::endl;
+  doubleList.clear();
+  std::cout << "Current List:" << std::endl;
+  doubleList.print();
+
+  std::cout << "\n\n ************* STRING ARRAYLIST TESTING ***************\n\n";
+
+  std::cout << "\nAttempting to add 'silly' to integer list.  Should work "
+            << std::endl;
+  stringList.insertAtEnd("silly");
+  std::cout << "Current List:" << std::endl;
+  stringList.print();
+
+  // Remove an item from the integer ArrayList
+  std::cout << "\nAttempting to remove item in the 30 index.  "
+            << "Should fail since nothing is there."
+            << std::endl;
+  stringList.removeAtIndex(30);
+  std::cout << "Current List:" << std::endl;
+  stringList.print();
+
+  std::cout << "\nAttempting to add 'super' to integer list at index 9.  "
+            << "Should work."
+            << std::endl;
+  stringList.insertAtIndex(9, "super");
+  std::cout << "Current List:" << std::endl;
+  stringList.print();
+
+  std::cout << "\nAttempting to remove item label 'de' from integer list.  "
+            << "Should work "
+            << std::endl;
+  stringList.remove("de");
+  std::cout << "Current List:" << std::endl;
+  stringList.print();
+
+  std::string value;
+  int found;
+  found = stringList.getItemAtIndex(3, value);
+  if (found == -1) {
+    std::cout << "\n*** ERROR ***\n"
+                 "Could not get item at index 3.  Value does not exist"
+              << std::endl;
+
+  } else {
+    std::cout << "\nGetting item at index 3 whose value is '"
+              << value << "'" << std::endl;
+
+  }
+
+  std::cout << "\nClear the list"
+            << std::endl;
+  stringList.clear();
+  std::cout << "Current List:" << std::endl;
+  stringList.print();
+
 
 }
