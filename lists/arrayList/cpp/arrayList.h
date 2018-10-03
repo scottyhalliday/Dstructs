@@ -24,11 +24,13 @@ public:
   bool isEmpty() const;
   bool isFull() const;
   void clear();
-  void insertEnd(int value);
-  void insertAt(int index, int value);
+  void insertAtEnd(const int value);
+  void insertAtIndex(const int index, const int value);
   void print() const;
-  bool isItemAtEqual(int index, int value) const;
-  void removeItemAt(int index);
+  bool isItemAtEqual(const int index, const int value) const;
+  void removeAtIndex(const int index);
+  void remove(const int value);
+  int searchArrayList(const int value) const;
 
 };
 
