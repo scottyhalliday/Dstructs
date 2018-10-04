@@ -28,10 +28,12 @@ class ArrayList:
         return (self.length == self.maxSize-1)
 
     def searchArrayList(self, value):
-        for i in range(0, self.length):
-            if (self.aList[i] == value):
-                return True
-        return False
+
+        try:
+            index = self.aList.index(value)
+            return True
+        except:
+            return False
 
     def insertAtEnd(self, value):
 
@@ -56,10 +58,41 @@ class ArrayList:
             return False
 
         # Check the index range
-        if (index < 0 || index > self.length):
+        if (index < 0 or index > self.length):
             print("insertAtIndex Error: Index is not in valid range of ArrayList")
             print("insertAtIndex Error: Index passed is '%d' ArrayList length is '%d'" % (index, self.length))
             return False
+
+        # Make sure the item does not already exist in the list
+        if self.searchArrayList(value):
+            print("Item '%s' already exists in the list.  Cannot add" % str(value))
+            return False        
+
+        self.aList.insert(index,value)
+
+        self.length += 1
+        return True
+
+    def isItemAtEqual(self, index, value):
+
+        try:
+            loc = self.aList.index(value)
+            if loc == index:
+                return True
+        except:
+            return False
+
+    def removeAtIndex(self, index):
+
+        if (index < 0 or index > self.length):
+            print("removeAtIndex Error: Index is not in valid range of ArrayList")
+            print("removeAtIndex Error: Index passed is '%d' ArrayList length is '%d'" % (index, self.length))
+            return False
+
+        value = self.aList[index]
+
+        self.aList.remove(value)
+        self.length -= 1
 
     def printList(self):
 
@@ -71,10 +104,6 @@ class ArrayList:
 
         print("]\n")
 
-#  void insertAtIndex(const int index, const arrayType& value);
-#  void print() const;
-#  bool isItemAtEqual(const int index, const arrayType& value) const;
-#  void removeAtIndex(const int index);
 #  void remove(const arrayType& value);
 #  int searchArrayList(const arrayType& value) const;
 #  int getItemAtIndex(const int index, arrayType& value);
@@ -96,4 +125,10 @@ if __name__ == "__main__":
 
     print("aList is what size? %d" % len(arrayList.aList))
     arrayList.printList()
-    arrayList.insertAtIndex(1,2)
+    arrayList.insertAtIndex(1,45)
+    arrayList.printList()
+
+    print(arrayList.isItemAtEqual(0,99))
+
+    rem = arrayList.removeAtIndex(2)
+    arrayList.printList()
