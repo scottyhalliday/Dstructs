@@ -7,8 +7,8 @@
 
 typedef struct {
 	int     maxSize;		// Maximum size of the ArrayList
-	int     length;		// Current length of the ArrayList
-	double *aList;			// Integer array list
+	int     length;		  // Current length of the ArrayList
+	double *aList;			// Double array list
 } doubleArrayList;
 
 // Functions

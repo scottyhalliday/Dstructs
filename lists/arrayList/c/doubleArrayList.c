@@ -1,5 +1,5 @@
 //
-// intArrayList.c
+// doubleArrayList.c
 // By Scott Hall
 //
 // Models the data structure for a Double type ArrayList
