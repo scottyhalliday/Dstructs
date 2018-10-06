@@ -201,7 +201,7 @@ void ArrayList<arrayType>::removeAtIndex(const int index) {
   }
 
   // Move the items to the left to keep list continuous.
-  for (int i=index; i<m_length; i++) {
+  for (int i=index; i<m_length-1; i++) {
     m_list[i] = m_list[i+1];
   }
 
@@ -230,7 +230,7 @@ void ArrayList<arrayType>::remove(const arrayType& value) {
   }
 
   // Move the items to the left to keep list continuous.
-  for (int i=index; i<m_length; i++) {
+  for (int i=index; i<m_length-1; i++) {
     m_list[i] = m_list[i+1];
   }
 
