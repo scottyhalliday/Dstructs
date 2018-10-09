@@ -12,14 +12,43 @@ public class ArrayList {
     this.aList   = new int[size];
   }
 
+  // Check if list is is full
+  public boolean isFull() {
+    if (this.length == this.maxSize) {
+      return true;
+    }
+    return false;
+  }
+
   // Inserts an item at the end of the list if it does not already exist
   // and the list is not full
   public void insertAtEnd(int value) {
+
+    // Is the list already full?
+    if (this.isFull()) {
+      System.out.println("insertAtEnd Error: List is already full.  Cannot add additional values");
+      return;
+    }
+
+    // Is this a dublicate item?  No duplicates
+    if (this.searchArrayList(value)) {
+      System.out.println("insertAtEnd Error: List is already contains value.  Cannot add duplicate values");
+      return;
+    }
+
     this.aList[this.length] = value;
     this.length++;
   }
 
-  // 
+  // Search the ArrayList for a value
+  public boolean searchArrayList(int value) {
+    for (int i=0; i<this.length; i++) {
+      if (this.aList[i] == value) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   // Prints the contents
   public void printList() {
@@ -39,7 +68,7 @@ public class ArrayList {
 
     ArrayList intArrayList;
 
-    int input[] = {1,2,3,4,5,6,7,8,9,10};
+    int input[] = {1,2,3,3,5,6,7,8,9,10};
 
     // Initialize the array list
     intArrayList = new ArrayList(10);
@@ -49,6 +78,8 @@ public class ArrayList {
     }
 
     intArrayList.printList();
+
+    intArrayList.insertAtEnd(11);
 
   }
 
