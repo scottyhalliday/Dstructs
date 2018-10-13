@@ -153,7 +153,7 @@ void ArrayList<arrayType>::insertAtIndex(const int index, const arrayType& value
 
   // Make space for the new value by moving all values to the right by one
   // for values beyond/at index
-  for (int i=m_length+1; i > index; i--) {
+  for (int i=m_length; i > index; i--) {
     m_list[i] = m_list[i-1];
   }
 
@@ -360,6 +360,11 @@ int main() {
             << "Should work "
             << std::endl;
   intList.remove(6);
+  std::cout << "Current List:" << std::endl;
+  intList.print();
+
+  std::cout << "\n Attempting to insert an item '6' at index 2" << std::endl;
+  intList.insertAtIndex(2,6);
   std::cout << "Current List:" << std::endl;
   intList.print();
 
