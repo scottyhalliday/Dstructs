@@ -1,0 +1,21 @@
+ARRAYLIST
+By Scott Hall
+
+This implementation of ArrayList was done using Javascript.
+
+Models an array list for fixed or mixed value types.  The list will not allow
+duplicate entries nor will it dynamically resize the ArrayList size.  The
+methods include the follow:
+o  Create the list.  List is initialized to empty state
+o  Determine whether the list is full
+o  Determine whether the list is empty
+o  Find the size of the list
+o  Destroy/Clear the list
+o  Determine whether an item is the same as a given list element
+o  Insert an item in the list at a specified location
+o  Remove an item from the list at a specified location
+o  Replace an item at a specified location with another item
+o  Retrieve an item at a specified location
+o  Search the list for a given item
+
+This implementation was tested using nodejs v8.12.0

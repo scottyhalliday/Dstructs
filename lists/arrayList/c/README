@@ -2,8 +2,9 @@ ARRAYLIST
 By Scott Hall
 
 The ArrayList is a fixed array-based list which can store any data type
-(consistent data type).  The implementation in C++ uses the template feature
-to allow single piece of code but usable for different datatypes.
+(consistent data type).  The implementation in C which means that to support
+different datatypes, separate implementations for each datatype needed to be
+created.  Supported datatypes are int, double and string.
 The features implemented for this data structure are described below.
     o  Create the list.  List is initialized to empty state
     o  Determine whether the list is full
@@ -18,9 +19,9 @@ The features implemented for this data structure are described below.
     o  Search the list for a given item
 
 To test this implementation simply use the makefile by entering 'make' in the
-terminal and it will compile and generate the 'arrayList' executable.  It can
-also be compiled in 'debug mode' by entering 'make debug' in the terminal.
-This will create an executable able to be passed to various debugging tools
-such as Valgrind.
+terminal and it will compile and generate the '<type>arrayList' executable.
+It can also be compiled in 'debug mode' by entering 'make debug' in the
+terminal.  This will create an executable able to be passed to various
+debugging tools such as Valgrind.
 
-Compiled against g++ 7.3.0
+Compiled against gcc 7.3.0

@@ -9,7 +9,6 @@ public class ArrayList<T> {
   public ArrayList(int size) {
     this.maxSize = size;
     this.length  = 0;
-    //this.aList   = new int[size];
     this.aList = (T[]) new Object[size];
   }
 

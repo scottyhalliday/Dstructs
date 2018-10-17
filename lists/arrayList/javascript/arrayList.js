@@ -7,7 +7,7 @@ class ArrayList {
   // Initialize the object.  If isStrict is true then the list only allows
   // data types consistent with the first item added
   constructor(size, isStrict) {
-    if (isStrict == undefined) {
+    if (isStrict == undefined || isStrict == false) {
       this.isStrict = false;
     } else {
       this.isStrict = true;
@@ -15,6 +15,7 @@ class ArrayList {
     this.maxSize = size;
     this.length  = 0;
     this.aList   = [];
+    this.aType   = undefined;
   }
 
   // --------------------------------------------------------------------------
@@ -76,6 +77,19 @@ class ArrayList {
       return false;
     }
 
+    // If the list is strict then check the type of the value prior to adding
+    if (this.isStrict && this.isEmpty == false) {
+      if (this.aType != typeof(value)) {
+        console.log("insertAtEnd Error: ArrayList is set to strict.  Value '%s' does not match array list type.  Cannot add", value);
+        return false;
+      }
+    }
+
+    // Set the array type if not done so already and list is strict
+    if (this.aType == undefined && this.isStrict) {
+      this.aType = typeof(value);
+    }
+
     // Otherwise we can add item
     this.aList.push(value);
 
@@ -109,6 +123,19 @@ class ArrayList {
     if (index < 0 || index > this.length) {
       console.log("insertAtIndex Error: Index is outside of list current range.  Cannot add item");
       return false;
+    }
+
+    // If the list is strict then check the type of the value prior to adding
+    if (this.isStrict && this.isEmpty == false) {
+      if (this.aType != typeof(value)) {
+        console.log("insertAtIndex Error: ArrayList is set to strict.  Value '%s' does not match array list type.  Cannot add", value);
+        return false;
+      }
+    }
+
+    // Set the array type if not done so already and list is strict
+    if (this.aType == undefined && this.isStrict) {
+      this.aType = typeof(value);
     }
 
     // Let's add the value at index, remove 0 items and let this internal
@@ -194,39 +221,75 @@ class ArrayList {
 // Main
 // Do some testing
 
-var intArrayList = new ArrayList(10);
+var numArrayList = new ArrayList(10, true);
+var mixArrayList = new ArrayList(10);
 
-intArrayList.insertAtEnd(1);
-intArrayList.insertAtEnd(2);
-intArrayList.insertAtEnd(3);
-intArrayList.insertAtEnd(4);
-intArrayList.insertAtEnd(5);
-intArrayList.insertAtEnd(6);
-intArrayList.insertAtEnd(7);
-intArrayList.insertAtEnd(8);
-intArrayList.insertAtEnd(9);
-intArrayList.insertAtEnd(10);
+numArrayList.insertAtEnd(1);
+numArrayList.insertAtEnd(2);
+numArrayList.insertAtEnd(3);
+numArrayList.insertAtEnd(4);
+numArrayList.insertAtEnd(5);
+numArrayList.insertAtEnd(6);
+numArrayList.insertAtEnd(7);
+numArrayList.insertAtEnd(8);
+numArrayList.insertAtEnd(9);
+numArrayList.insertAtEnd("Bad Value");
 
-console.log("\n INTEGER ONLY ARRAY LIST\n");
+console.log("\n NUMBER ONLY ARRAY LIST\n");
 
 console.log(" Original List");
-intArrayList.printList();
+numArrayList.printList();
 
 console.log("Let's remove item at index 4.  Should work");
-intArrayList.removeAtIndex(4);
-intArrayList.printList();
+numArrayList.removeAtIndex(4);
+numArrayList.printList();
 
 console.log("Let's remove item 9.  Should work");
-intArrayList.remove(9);
-intArrayList.printList();
+numArrayList.remove(9);
+numArrayList.printList();
 
 console.log("Let's remove item 99.  Should fail since 99 isn't in the list");
-intArrayList.remove(99);
-intArrayList.printList();
+numArrayList.remove(99);
+numArrayList.printList();
 
 console.log("Let's add item 99 to index 6.");
-intArrayList.insertAtIndex(6, 99);
-intArrayList.printList();
+numArrayList.insertAtIndex(6, 99);
+numArrayList.printList();
 
 console.log("Let's return the item at index 2");
-console.log("Item at index 2 is " + intArrayList.getItemAtIndex(2));
+console.log("Item at index 2 is " + numArrayList.getItemAtIndex(2));
+
+mixArrayList.insertAtEnd(1);
+mixArrayList.insertAtEnd(2);
+mixArrayList.insertAtEnd(3);
+mixArrayList.insertAtEnd(4);
+mixArrayList.insertAtEnd("Hello");
+mixArrayList.insertAtEnd(6);
+mixArrayList.insertAtEnd(7);
+mixArrayList.insertAtEnd(8);
+mixArrayList.insertAtEnd(9);
+mixArrayList.insertAtEnd("Ok");
+
+console.log("\n MIXED ARRAY LIST\n");
+
+console.log(" Original List");
+mixArrayList.printList();
+
+console.log("Let's remove item at index 4.  Should work");
+mixArrayList.removeAtIndex(4);
+mixArrayList.printList();
+
+console.log("Let's remove item 'Hello'.  Should work");
+mixArrayList.remove("Hello");
+mixArrayList.printList();
+
+console.log("Let's remove item 'Not in here'.  Should fail since 99 isn't in the list");
+mixArrayList.remove("Not in here");
+mixArrayList.printList();
+
+console.log("Let's add item 'Not in here' to index 6.");
+mixArrayList.insertAtIndex(6, "Not in here");
+mixArrayList.printList();
+
+console.log("Let's return the item at index 2");
+console.log("Item at index 2 is " + mixArrayList.getItemAtIndex(2));
