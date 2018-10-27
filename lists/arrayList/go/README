@@ -1,0 +1,38 @@
+ARRAYLIST
+By Scott Hall
+
+Go Implementation
+-----------------
+
+The ArrayList is a fixed array-based list which can store any data type
+(consistent data type).  Since Go doesn't allow overloading, there are three
+different implementations of the overall data structure.  One to support
+integers, another to support double/floats and a final to support strings.
+The available features for all three implementations are itemized below.
+    o  Create the list.  List is initialized to empty state
+    o  Determine whether the list is full
+    o  Determine whether the list is empty
+    o  Find the size of the list
+    o  Destroy/Clear the list
+    o  Determine whether an item is the same as a given list element
+    o  Insert an item in the list at a specified location
+    o  Remove an item from the list at a specified location
+    o  Replace an item at a specified location with another item
+    o  Retrieve an item at a specified location
+    o  Search the list for a given item
+
+The workspace is setup consistent with Go practices.  The source files for
+the different ArrayList's are in the go/src/arrayList directory.  The test
+file is in the go/src/test directory.  This contains the main function call.
+A simple makefile has been supplied to allow easy install of packages and
+compile of the final executable named 'test'.  A symbolic link will point to
+the created 'test' executable in the go/bin directory.  The GOPATH will be
+set for the current workspace.
+
+To build, be in the Dstructs/lists/arrayList/go directory and simply type:
+  make
+To clean up a build simply type:
+  make clean
+in the same directory.
+
+Compiled with go version go1.10.1 linux/amd64

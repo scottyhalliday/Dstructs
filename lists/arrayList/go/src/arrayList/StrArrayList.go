@@ -2,19 +2,19 @@ package arrayList
 
 import "fmt"
 
-type intListStruct struct {
+type strListStruct struct {
   maxSize int
   length  int
-  aList   []int
+  aList   []string
 }
 
 // ----------------------------------------------------------------------------
 
 // Initializes the array list and its structure components and returns the
 // initialized struct
-func IntArrayList(aSize int) intListStruct {
+func StrArrayList(aSize int) strListStruct {
 
-  var list intListStruct
+  var list strListStruct
   var indx int
 
   // Initialize the array list structure elements
@@ -23,16 +23,17 @@ func IntArrayList(aSize int) intListStruct {
 
   indx = 0
   for indx < aSize {
-      list.aList   = append(list.aList, 0)
+      list.aList   = append(list.aList, "")
       indx = indx+1
   }
+
   return list
 }
 
 // ----------------------------------------------------------------------------
 
 // Returns if the list is is full
-func IntArrayListIsFull(list intListStruct) bool {
+func StrArrayListIsFull(list strListStruct) bool {
 
   var result bool
 
@@ -48,7 +49,7 @@ func IntArrayListIsFull(list intListStruct) bool {
 // ----------------------------------------------------------------------------
 
 // Returns if the list is is empty
-func IntArrayListIsEmpty(list intListStruct) bool {
+func StrArrayListIsEmpty(list strListStruct) bool {
 
   var result bool
 
@@ -64,21 +65,21 @@ func IntArrayListIsEmpty(list intListStruct) bool {
 // ----------------------------------------------------------------------------
 
 // Returns the maximum size of the array list
-func IntArrayListMaxSize(list intListStruct) int {
+func StrArrayListMaxSize(list strListStruct) int {
   return list.maxSize
 }
 
 // ----------------------------------------------------------------------------
 
 // Returns the current length of the list
-func IntArrayListLength(list intListStruct) int {
+func StrArrayListLength(list strListStruct) int {
   return list.length
 }
 
 // ----------------------------------------------------------------------------
 
 // Search for an item in the list and return the index if it exists
-func SearchIntArrayList(value int, list intListStruct) int {
+func SearchStrArrayList(value string, list strListStruct) int {
 
   var indx int
 
@@ -96,16 +97,16 @@ func SearchIntArrayList(value int, list intListStruct) int {
 
 // Adds an item at the end of the list.  The item cannot already exist and
 // the list cannot be full.
-func IntArrayListInsertAtEnd(value int, list *intListStruct) int {
+func StrArrayListInsertAtEnd(value string, list *strListStruct) int {
 
   // Is the list full?
-  if IntArrayListIsFull(*list) == true {
+  if StrArrayListIsFull(*list) == true {
     fmt.Println("insertAtEnd Error: List is full cannot add new item")
     return 1
   }
 
   // Does the list already have the value
-  if SearchIntArrayList(value, *list) > -1 {
+  if SearchStrArrayList(value, *list) > -1 {
     fmt.Println("insertAtEnd Error: List already has the value ", value)
     return 1
   }
@@ -121,12 +122,12 @@ func IntArrayListInsertAtEnd(value int, list *intListStruct) int {
 // Adds an item into the list at the specified index.  If the list is full,
 // or the value is already in the list or the index given is invalid then
 // nothing is added
-func IntArrayListInsertAtIndex(index int, value int, list *intListStruct) int {
+func StrArrayListInsertAtIndex(index int, value string, list *strListStruct) int {
 
   var i int
 
   // Is the list full?
-  if IntArrayListIsFull(*list) == true {
+  if StrArrayListIsFull(*list) == true {
     fmt.Println("insertAtEnd Error: List is full cannot add new item")
     return 1
   }
@@ -138,7 +139,7 @@ func IntArrayListInsertAtIndex(index int, value int, list *intListStruct) int {
   }
 
   // Does the list already have the value
-  if SearchIntArrayList(value, *list) > -1 {
+  if SearchStrArrayList(value, *list) > -1 {
     fmt.Println("insertAtEnd Error: List already has the value ", value)
     return 1
   }
@@ -159,7 +160,7 @@ func IntArrayListInsertAtIndex(index int, value int, list *intListStruct) int {
 // ----------------------------------------------------------------------------
 
 // Removes the item at specified index.  The index must be valid
-func IntArrayListRemoveAtIndex(index int, list *intListStruct) int {
+func StrArrayListRemoveAtIndex(index int, list *strListStruct) int {
 
   var i int
 
@@ -185,14 +186,14 @@ func IntArrayListRemoveAtIndex(index int, list *intListStruct) int {
 
 // Searchs for a value in the list and removes it.  If the item does not exist
 // then nothing is done.
-func IntArrayListRemove(value int, list *intListStruct) int {
+func StrArrayListRemove(value string, list *strListStruct) int {
 
   var i     int
   var index int
 
   // Get the index of the value in the list.  If -1 is returned then the
   // value does not exist in the list
-  index = SearchIntArrayList(value, *list)
+  index = SearchStrArrayList(value, *list)
 
   // Is the index valid?
   if (index == -1) {
@@ -217,19 +218,19 @@ func IntArrayListRemove(value int, list *intListStruct) int {
 // Searchs for a value in the list and removes it.  If the item does not exist
 // then nothing is done.  Returns a map which identifies if value was found
 // and the value itself.  If not found then zero's are returned
-func IntArrayListGetItemAtIndex(index int, list intListStruct) map[string]int {
+func StrArrayListGetItemAtIndex(index int, list strListStruct) map[string]string {
 
-  result := make(map[string]int)
+  result := make(map[string]string)
 
   // Is the index valid?
   if (index < 0 || index > list.length) {
     fmt.Println("GetItemAtIndex Error: Index is not in valid range")
-    result["valid"] = 0
-    result["value"] = 0
+    result["valid"] = "0"
+    result["value"] = ""
     return result
   }
 
-  result["valid"] = 1
+  result["valid"] = "1"
   result["value"] = list.aList[index]
 
   return result
@@ -238,7 +239,7 @@ func IntArrayListGetItemAtIndex(index int, list intListStruct) map[string]int {
 // ----------------------------------------------------------------------------
 
 // Check if an item is equal at an index
-func IntArrayListIsItemAtEqual(index int, value int, list intListStruct) bool {
+func StrArrayListIsItemAtEqual(index int, value string, list strListStruct) bool {
 
   // Is the index valid?
   if (index < 0 || index > list.length) {
@@ -256,11 +257,11 @@ func IntArrayListIsItemAtEqual(index int, value int, list intListStruct) bool {
 // ----------------------------------------------------------------------------
 
 // Print the contents of the array list
-func PrintIntArrayList(list intListStruct) {
+func PrintStrArrayList(list strListStruct) {
 
   var indx int
 
-  fmt.Println("INTEGER ARRAY LIST: ")
+  fmt.Println("STRING ARRAY LIST: ")
 
   for indx < list.length {
     if indx % 10 == 0 && indx != 0 {
@@ -273,10 +274,9 @@ func PrintIntArrayList(list intListStruct) {
 
 }
 
-
 // ----------------------------------------------------------------------------
 
 // Clear the array list
-func ClearIntArrayList(list *intListStruct) {
+func ClearStrArrayList(list *strListStruct) {
   list.length = 0
 }
