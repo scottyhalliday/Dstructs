@@ -2,13 +2,7 @@
 Welcome to the complete Data Structure package.  DSTRUCTS are a series
 of data structures in the following languages.
 
-  Python
-  C
-  C++
-  Java
-  JavaScript
-  Go
-  Ruby
+Python, C, C++, Java, JavaScript, Go, Ruby
 
 The data structure package is organized into the different core Data
 structures, sorting algorithms and proposed new sorting algorithms.
