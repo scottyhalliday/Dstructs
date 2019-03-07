@@ -7,3 +7,4 @@ debug:
 clean:
 	rm -f linkedListNode
 	rm -f linkedList
+
