@@ -29,4 +29,5 @@ int  insert_node_at_end(int);
 void print_list();
 int  remove_node(int);
 int  remove_node_at_end();
+int  delete_list();
 

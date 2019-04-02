@@ -61,6 +61,16 @@
 
 // ----------------------------------------------------------------------------
 int
+delete_list()
+{
+    if (LLIST_CNT == 0)
+        return(1);
+    remove_node_at_end();
+    return(delete_list());
+}
+
+// ----------------------------------------------------------------------------
+int
 get_list_length()
 {
     return(LLIST_CNT);
@@ -201,6 +211,10 @@ print_list()
     i = 0;
     n = HEAD;
 
+    // If the HEAD is NULL then the list is empty and cannot be printed
+    if (HEAD == NULL) 
+        return;
+
     while (1) {
         /*
         if (n->next == NULL) 
@@ -266,8 +280,15 @@ int remove_node(int index)
 
     if (index == 0)
     {
-        nnext = get_node_at_index(index+1);
-        HEAD = nnext;
+        if (LLIST_CNT > 1) {
+            nnext = get_node_at_index(index+1);
+            HEAD = nnext;
+        } 
+        // This is the last node in the list, so cleanup
+        else 
+        {
+            HEAD = NULL;
+        }
     }
     else if (index == LLIST_CNT)
     {
@@ -375,6 +396,13 @@ main(int argc, char **argv)
     printf("List length is %d\n", get_list_length());
 
     remove_node_at_end();
+    print_list();
+
+    printf("List length is %d\n", get_list_length());
+
+    printf("******************************************\n\n");
+
+    delete_list();
     print_list();
 
     printf("List length is %d\n", get_list_length());
