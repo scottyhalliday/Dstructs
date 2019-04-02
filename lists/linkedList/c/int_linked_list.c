@@ -188,24 +188,6 @@ insert_node(int index, int value)
 int
 insert_node_at_end(int value)
 {
-    /*struct Node *n;
-
-    // Allocate memory for the node
-    n = (struct Node *) malloc(sizeof(struct Node));
-
-    n->next = NULL;
-    n->data = value;
-
-    if (LLIST_CNT == 0) 
-        HEAD = n;
-    else 
-        TAIL->next = n;
-
-    // Increase the list size and move the tail
-    TAIL = n;
-    LLIST_CNT++;
-    return(1);
-    */
     return(insert_node(LLIST_CNT, value));
 }
 

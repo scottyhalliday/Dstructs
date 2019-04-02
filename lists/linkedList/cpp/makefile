@@ -1,5 +1,7 @@
 install:
-	g++ -Wall linkedListNode.cpp -o linkedListNode
+	g++ -Wall -c linkedListNode.cpp 
+	g++ -Wall -c linkedList.cpp 
+	g++ -o linkedList linkedListNode.o linkedList.o -lm
 
 debug:
 	g++ -Wall -g linkedListNode.cpp -o linkedListNode

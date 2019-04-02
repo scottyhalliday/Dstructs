@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include "linkedList.h"
+#include "linkedListNode.h"
 
 //-----------------------------------------------------------------------------
 

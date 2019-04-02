@@ -43,24 +43,3 @@ void LinkedListNode::printNodeData() {
   std::cout << m_data << " -> ";
 }
 
-//-----------------------------------------------------------------------------
-
-int main() {
-
-  // Make some nodes.  No connections will be made since these are nodes
-  // only.  Let the linked list data structures handle connections
-  LinkedListNode node1;
-  LinkedListNode node2;
-  LinkedListNode node3;
-
-  node1.setNodeData(40);
-  node2.setNodeData(55);
-  node3.setNodeData(99);
-
-  node1.printNodeData();
-  node2.printNodeData();
-  node3.printNodeData();
-
-  std::cout << "\n";
-
-}
