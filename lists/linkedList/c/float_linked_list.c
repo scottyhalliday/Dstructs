@@ -1,12 +1,12 @@
 /*
- * INT_LINKED_LIST.C
+ * FLOAT_LINKED_LIST.C
  *
  * Author       : Scott Hall
  * Contributors : Scott Hall (Github: smhall316)
  *                (Please add your name if you contribute)
  *
  * Description:
- * Implementation of an integer linked list.  
+ * Implementation of an floating-point linked list.  
  * 
  * ****R E F R E S H E R   B L O C K ******************************************
  * For a refresher recall how the '.' and '->' notations are used within C.  
@@ -57,7 +57,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
-#include "include/int_linked_list.h"
+#include "include/float_linked_list.h"
 
 // ----------------------------------------------------------------------------
 int
@@ -131,7 +131,7 @@ initialize_linked_list()
 // If the index is out of range, then nothing is inserted.
 // 
 int
-insert_node(int index, int value) 
+insert_node(int index, double value) 
 {
 
     struct Node *n;
@@ -196,7 +196,7 @@ insert_node(int index, int value)
 
 // ----------------------------------------------------------------------------
 int
-insert_node_at_end(int value)
+insert_node_at_end(double value)
 {
     return(insert_node(LLIST_CNT, value));
 }
@@ -216,13 +216,18 @@ print_list()
         return;
 
     while (1) {
-
+        /*
+        if (n->next == NULL) 
+            printf("Node Data=%d, NEXT IS  NULL\n", n->data);
+        else 
+            printf("Node Data=%d, NEXT NOT NULL\n", n->data);
+        */
         i++;
 
         if (n->next == NULL) 
-            printf("%5d\n", n->data);
+            printf("%10.3f\n", n->data);
         else
-            printf("%5d -> ", n->data);
+            printf("%10.3f -> ", n->data);
 
         // If the next node is NULL then we are done!
         if (n->next == NULL) {
@@ -325,24 +330,24 @@ main(int argc, char **argv)
     struct Node *n;
 
     initialize_linked_list();
-    insert_node(0,35);
-    insert_node_at_end(10);
-    insert_node_at_end(20);
-    insert_node_at_end(30);
-    insert_node_at_end(40);
-    insert_node_at_end(50);
-    insert_node_at_end(60);
-    insert_node_at_end(70);
-    insert_node_at_end(80);
-    insert_node_at_end(90);
-    insert_node_at_end(100);
-    insert_node_at_end(200);
-    insert_node_at_end(300);
-    insert_node_at_end(400);
-    insert_node_at_end(500);
-    insert_node_at_end(600);
+    insert_node(0,35.0);
+    insert_node_at_end(10.0);
+    insert_node_at_end(20.0);
+    insert_node_at_end(30.0);
+    insert_node_at_end(40.0);
+    insert_node_at_end(50.0);
+    insert_node_at_end(60.0);
+    insert_node_at_end(70.0);
+    insert_node_at_end(80.0);
+    insert_node_at_end(90.0);
+    insert_node_at_end(100.0);
+    insert_node_at_end(200.0);
+    insert_node_at_end(300.0);
+    insert_node_at_end(400.0);
+    insert_node_at_end(500.0);
+    insert_node_at_end(600.0);
 
-    printf("C Implementation of Integer Linked List\n");
+    printf("C Implementation of Floating-Point Linked List\n");
     print_list();
 
     printf("List length is %d\n", get_list_length());
@@ -352,25 +357,25 @@ main(int argc, char **argv)
     if (n == NULL)
         printf("Couldn't find a node\n");
     else
-        printf("Get node at index 4 is %d\n", n->data);
+        printf("Get node at index 4 is %f\n", n->data);
     
     printf("\nInsert 34 at the beginning of the list\n");
-    insert_node(0,34);
+    insert_node(0,34.0);
     print_list();
     printf("List length is %d\n", get_list_length());
     
     printf("\nInsert 340 into index 17 of the list\n");
-    insert_node(17,340);
+    insert_node(17,340.0);
     print_list();
     printf("List length is %d\n", get_list_length());
 
     printf("\nInsert 540 into index 18 of the list\n");
-    insert_node(18,540);
+    insert_node(18,540.0);
     print_list();
     printf("List length is %d\n", get_list_length());
 
     printf("\nInsert 1000 into index 18 of the list\n");
-    insert_node(18,1000);
+    insert_node(18,1000.0);
     print_list();
     printf("List length is %d\n", get_list_length());
 

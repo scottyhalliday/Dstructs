@@ -1,12 +1,12 @@
 /*
- * INT_LINKED_LIST.C
+ * STRING_LINKED_LIST.C
  *
  * Author       : Scott Hall
  * Contributors : Scott Hall (Github: smhall316)
  *                (Please add your name if you contribute)
  *
  * Description:
- * Implementation of an integer linked list.  
+ * Implementation of an string linked list.  
  * 
  * ****R E F R E S H E R   B L O C K ******************************************
  * For a refresher recall how the '.' and '->' notations are used within C.  
@@ -55,9 +55,11 @@
  * we can 'point' to other nodes!! 
  * ****************************************************************************
  */
+
 #include <stdio.h>
 #include <stdlib.h>
-#include "include/int_linked_list.h"
+#include <string.h>
+#include "include/string_linked_list.h"
 
 // ----------------------------------------------------------------------------
 int
@@ -131,7 +133,7 @@ initialize_linked_list()
 // If the index is out of range, then nothing is inserted.
 // 
 int
-insert_node(int index, int value) 
+insert_node(int index, char *value) 
 {
 
     struct Node *n;
@@ -155,8 +157,11 @@ insert_node(int index, int value)
     // Allocate memory for the node
     n = (struct Node *) malloc(sizeof(struct Node));
 
+    // Allocate memory for the string itself
+    n->data = (char *) calloc(strlen(value), sizeof(char));
+
     n->next = NULL;
-    n->data = value;
+    strcpy(n->data, value);
 
     // If inserting at the beginning then simply reassign the HEAD node
     if (index == 0) {
@@ -196,7 +201,7 @@ insert_node(int index, int value)
 
 // ----------------------------------------------------------------------------
 int
-insert_node_at_end(int value)
+insert_node_at_end(char *value)
 {
     return(insert_node(LLIST_CNT, value));
 }
@@ -216,13 +221,18 @@ print_list()
         return;
 
     while (1) {
-
+        /*
+        if (n->next == NULL) 
+            printf("Node Data=%d, NEXT IS  NULL\n", n->data);
+        else 
+            printf("Node Data=%d, NEXT NOT NULL\n", n->data);
+        */
         i++;
 
         if (n->next == NULL) 
-            printf("%5d\n", n->data);
+            printf("%s\n", n->data);
         else
-            printf("%5d -> ", n->data);
+            printf("%s -> ", n->data);
 
         // If the next node is NULL then we are done!
         if (n->next == NULL) {
@@ -300,6 +310,7 @@ int remove_node(int index)
     }
 
     // Release the node's memory
+    free(n->data);
     free(n);
 
     // Decrement our counter
@@ -325,79 +336,31 @@ main(int argc, char **argv)
     struct Node *n;
 
     initialize_linked_list();
-    insert_node(0,35);
-    insert_node_at_end(10);
-    insert_node_at_end(20);
-    insert_node_at_end(30);
-    insert_node_at_end(40);
-    insert_node_at_end(50);
-    insert_node_at_end(60);
-    insert_node_at_end(70);
-    insert_node_at_end(80);
-    insert_node_at_end(90);
-    insert_node_at_end(100);
-    insert_node_at_end(200);
-    insert_node_at_end(300);
-    insert_node_at_end(400);
-    insert_node_at_end(500);
-    insert_node_at_end(600);
-
-    printf("C Implementation of Integer Linked List\n");
-    print_list();
-
-    printf("List length is %d\n", get_list_length());
     
-    n = get_node_at_index(4);
-
-    if (n == NULL)
-        printf("Couldn't find a node\n");
-    else
-        printf("Get node at index 4 is %d\n", n->data);
-    
-    printf("\nInsert 34 at the beginning of the list\n");
-    insert_node(0,34);
-    print_list();
-    printf("List length is %d\n", get_list_length());
-    
-    printf("\nInsert 340 into index 17 of the list\n");
-    insert_node(17,340);
+    printf("Create Initial List\n");
+    insert_node(0,"hello world");
+    insert_node_at_end("this is a");
+    insert_node_at_end("linked");
+    insert_node_at_end("list");
+    insert_node_at_end("of strings");
+    insert_node_at_end(".");
     print_list();
     printf("List length is %d\n", get_list_length());
 
-    printf("\nInsert 540 into index 18 of the list\n");
-    insert_node(18,540);
+    printf("\nInsert string at index 3\n");
+    insert_node(3, "I added this at 3");
     print_list();
     printf("List length is %d\n", get_list_length());
 
-    printf("\nInsert 1000 into index 18 of the list\n");
-    insert_node(18,1000);
-    print_list();
-    printf("List length is %d\n", get_list_length());
-
-    printf("\nRemove the node at index 18\n");
-    remove_node(18);
-    print_list();
-    printf("List length is %d\n", get_list_length());
-
-    printf("\nRemove the first node from the list\n");
-    remove_node(0);
-    print_list();
-    printf("List length is %d\n", get_list_length());
-
-    printf("\nRemove the node at index 17 from the list\n");
-    remove_node(17);
-    print_list();
-    printf("List length is %d\n", get_list_length());
-
-    printf("\nRemove the last node from the list\n");
+    printf("\nRemove node at the end\n");
     remove_node_at_end();
     print_list();
     printf("List length is %d\n", get_list_length());
 
-
-    printf("\nDelete the entire list\n");
+    printf("\nDelete the list\n");
     delete_list();
     print_list();
     printf("List length is %d\n", get_list_length());
+
 
 }
