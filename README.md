@@ -16,8 +16,8 @@ in this package.  I wish I had to time to get them all but I will focus mostly o
 common data structures.  To aid the organization of this I group the data structures into
 sections.
 1. **Lists**
-  * Array List
-  * Linked List
+   - Array List
+   - Linked List
 
 2. **Trees**
   1. AVL Tree
