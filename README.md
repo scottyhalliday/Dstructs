@@ -18,6 +18,7 @@ sections.
 1. **Lists**
   1. Array List
   2. Linked List
+
 2. **Trees**
   1. AVL Tree
   2. Binary Search Tree
@@ -27,14 +28,17 @@ sections.
   6. Binary Heap
   7. Binomial Heal
   8. Merkle Tree
+
 3. **Hashes**
   1. Hash Table
   2. Hash Tree
   3. Bloom Filter
+
 4. **Graphs**
   1. Graph
   2. Adjacency List
   3. Directed Graph
+
 5. **Sorting**
   1. Simple Sort
   2. Insertion Sort
@@ -47,6 +51,7 @@ sections.
   9. Counting Sort
   10. Bucket Sort
   11. Radix Sort
+  
 6. **Searching**
   1. Linear Search
   2. Binary Search
