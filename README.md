@@ -18,47 +18,42 @@ sections.
 1. **Lists**
    - Array List
    - Linked List
-
 2. **Trees**
-  1. AVL Tree
-  2. Binary Search Tree
-  3. Binary Tree
-  4. B-Trees
-  5. Heap
-  6. Binary Heap
-  7. Binomial Heal
-  8. Merkle Tree
-
+   - AVL Tree
+   - Binary Search Tree
+   - Binary Tree
+   - B-Trees
+   - Heap
+   - Binary Heap
+   - Binomial Heal
+   - Merkle Tree
 3. **Hashes**
-  1. Hash Table
-  2. Hash Tree
-  3. Bloom Filter
-
+   - Hash Table
+   - Hash Tree
+   - Bloom Filter
 4. **Graphs**
-  1. Graph
-  2. Adjacency List
-  3. Directed Graph
-
+   - Graph
+   - Adjacency List
+   - Directed Graph
 5. **Sorting**
-  1. Simple Sort
-  2. Insertion Sort
-  3. Merge Sort
-  4. Heap Sort
-  5. Quick Sort
-  6. Shell Sort
-  7. Bubble Sort
-  8. Comb Sort
-  9. Counting Sort
-  10. Bucket Sort
-  11. Radix Sort
-
+   - Simple Sort
+   - Insertion Sort
+   - Merge Sort
+   - Heap Sort
+   - Quick Sort
+   - Shell Sort
+   - Bubble Sort
+   - Comb Sort
+   - Counting Sort
+   - Bucket Sort
+   - Radix Sort
 6. **Searching**
-  1. Linear Search
-  2. Binary Search
-  3. Jump Search
-  4. Interpolation Search
-  5. Exponential Search
-  6. Lasso Search (My invention!!)
+   - Linear Search
+   - Binary Search
+   - Jump Search
+   - Interpolation Search
+   - Exponential Search
+   - Lasso Search (My invention!!)
 
 **Disclaimer**
 
