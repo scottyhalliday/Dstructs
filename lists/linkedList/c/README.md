@@ -10,9 +10,20 @@ The main types supported are
 2. Double (Floating point)
 3. String
 
-These implementations does not allow the three types to be used together in a single list.  This can
+These implementations do not allow the three types to be used together in a single list.  This can
 be achieved with unions or a more intelligent structure but since this is for simplicity I will 
 keep the types seperate.
+
+The linked lists have the following capabilities:
+1. get_list_length
+2. get_node_at_index
+3. initialize_linked_list
+4. insert_node
+5. insert_node_at_end
+6. print_list
+7. remove_node
+8. remove_node_at_end
+9. delete_list
 
 To use this code simply execute the makefile
 
