@@ -16,8 +16,8 @@ in this package.  I wish I had to time to get them all but I will focus mostly o
 common data structures.  To aid the organization of this I group the data structures into
 sections.
 1. **Lists**
-  1. Array List
-  2. Linked List
+  * Array List
+  * Linked List
 
 2. **Trees**
   1. AVL Tree
@@ -51,7 +51,7 @@ sections.
   9. Counting Sort
   10. Bucket Sort
   11. Radix Sort
-  
+
 6. **Searching**
   1. Linear Search
   2. Binary Search
