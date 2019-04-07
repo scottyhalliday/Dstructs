@@ -1,0 +1,213 @@
+/*
+ * STRING_STACK_ARRAY.C
+ *
+ * Author       : Scott Hall
+ * Contributors : Scott Hall (Github: smhall316)
+ *                (Please add your name if you contribute)
+ *
+ * Description:
+ * Implementation of a string type stack using the array list data structure.  
+ * The stack is a fixed length array list.  If the stack is full and another
+ * item is added an error will occur.  This implementation will not allocate
+ * more memory for stack overflow, it will simply disregard the push.
+ * 
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "include/string_stack_array.h"
+
+// ----------------------------------------------------------------------------
+int
+clear_stack(struct array_stack *stack)
+{
+    int i;
+    for (i=0; i<stack->index; i++) 
+    {
+        free(stack->stack[i]);
+    }
+
+    stack->index = 0;
+    return(0);
+}
+
+// ----------------------------------------------------------------------------
+int
+delete_stack(struct array_stack *stack)
+{
+
+    int i;
+    for (i=0; i<stack->index; i++) 
+    {
+        free(stack->stack[i]);
+    }
+    free(stack->stack);
+    free(stack);
+    return(0);
+}
+
+// ----------------------------------------------------------------------------
+struct array_stack* 
+initialize_stack(int size) 
+{
+    struct array_stack *stack;
+
+    // Allocate the stack
+    stack = (struct array_stack*) malloc(sizeof(struct array_stack));
+
+    stack->size  = size;
+    stack->index = 0;
+    stack->stack = (char **) calloc(size, sizeof(char *));
+
+    return stack;
+}
+
+// ----------------------------------------------------------------------------
+int
+is_empty(struct array_stack *stack)
+{
+    if (stack->index == 0)
+        return(1);
+    return(0);
+}
+
+// ----------------------------------------------------------------------------
+int
+is_full(struct array_stack *stack)
+{
+    if (stack->index == stack->size)
+        return(1);
+    return(0);
+}
+
+// ----------------------------------------------------------------------------
+void
+print_stack(struct array_stack *stack)
+{
+    int i;
+    printf(" - Stack Contents\n");
+
+    for (i=0; i<stack->size; i++) {
+        if (i < stack->index)
+            printf(" %s ", stack->stack[i]);
+        else
+            printf("   -   ");
+
+        if (i % 10 == 0 && i != 0)
+            printf("\n");
+    }
+    printf("\n");
+}
+
+// ----------------------------------------------------------------------------
+void 
+print_stack_status(struct array_stack *stack)
+{
+    printf("\n ********** STACK STATUS REPORT **********\n");
+
+    // Is stack empty?
+    if (is_empty(stack) == 1)
+        printf(" - Stack Empty?       Yes\n");
+    else
+        printf(" - Stack Empty?        No\n");
+
+    // Is stack full?
+    if (is_full(stack) == 1)
+        printf(" - Stack Full?        Yes\n");
+    else
+        printf(" - Stack Full?         No\n");
+
+    printf(" - Stack Index    = %5d\n", stack->index);
+    printf(" - Stack Max Size = %5d\n\n", stack->size);
+
+    // Print the stack
+    print_stack(stack);
+
+    printf("\n *****************************************\n\n");
+
+}
+
+// ----------------------------------------------------------------------------
+int
+push(char *value, struct array_stack *stack)
+{
+
+    if (is_full(stack) == 1) {
+        printf("** ERROR ** :: PUSH :: Stack is full, cannot push additional items\n");
+        printf("                       Remove items by calling POP\n");
+        return(1);
+    }
+
+    // Initialize memory in the current stack location to hold this string
+    stack->stack[stack->index] = (char *) calloc(strlen(value)+1, sizeof(char));
+
+    strcpy(stack->stack[stack->index], value);
+    stack->index++;
+
+    return(0);
+}
+
+// ----------------------------------------------------------------------------
+int
+pop(struct array_stack *stack, char *pvalue)
+{
+    if (is_empty(stack) == 1) {
+        printf("** ERROR ** :: POP :: Stack is empty, cannot get any more items\n");
+        printf("                      Add items by calling PUSH\n");
+        return(1);
+    }
+
+    strcpy(pvalue, stack->stack[stack->index-1]);
+
+    // Free the memory that the string occupied in the stack
+    free(stack->stack[stack->index-1]);
+
+    stack->index--;
+
+    return(0);
+
+}
+
+// ----------------------------------------------------------------------------
+int
+main(int argc, char **argv)
+{
+    char pvalue[255];
+    struct array_stack *stack;
+
+    printf("\n\nSTRING STACK ARRAY IN C\n\n");
+    stack = initialize_stack(10);
+    print_stack_status(stack);
+
+    push("Hello" ,stack);
+    push("this"  ,stack);
+    push("is"    ,stack);
+    push("a"     ,stack);
+    push("string",stack);
+    push("based" ,stack);
+    push("stack" ,stack);
+    push("It"    ,stack);
+    push("is"    ,stack);
+    push("a"     ,stack);
+    print_stack_status(stack);
+
+    printf("Push 'complicated' to the full stack\n");
+    push("complicated" ,stack);
+    print_stack_status(stack);
+
+    printf("Pop the top value off the stack\n");
+    pop(stack, pvalue);
+    printf("Popped '%s' from the stack\n", pvalue);
+    print_stack_status(stack);
+
+    printf("Push 'complicated' to the full stack\n");
+    push("complicated" ,stack);
+    print_stack_status(stack);
+
+    printf("\nClear the stack\n");
+    clear_stack(stack);    
+    print_stack_status(stack);
+
+    delete_stack(stack);
+}
