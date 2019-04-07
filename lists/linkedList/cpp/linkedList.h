@@ -18,6 +18,8 @@ protected:
 public:
   LinkedList();
  ~LinkedList();
+  int  insertAtEnd(int value);
+  bool isEmpty();
 
 };
 
