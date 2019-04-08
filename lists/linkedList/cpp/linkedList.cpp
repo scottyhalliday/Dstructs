@@ -13,8 +13,8 @@
 LinkedList::LinkedList() {
   std::cout << "LINKED LIST CONSTRUCTOR" << std::endl;
   m_count = 0;
-  m_head  = NULL;
-  m_tail  = NULL;
+  m_head  = new int;
+  m_tail  = new int;
 }
 
 //-----------------------------------------------------------------------------
@@ -22,8 +22,36 @@ LinkedList::LinkedList() {
 // De-Constructor for cleaning up
 LinkedList::~LinkedList() {
   std::cout << "LINKED LIST DECONSTRUCTOR" << std::endl;
+  delete m_head;
+  delete m_tail;
+  m_head = NULL;
+  m_tail = NULL;
 }
 
+//-----------------------------------------------------------------------------
+
+// Is the list empty
+bool LinkedList::isEmpty() {
+  if (m_count == 0) {
+    return true;
+  }
+  return false;
+}
+
+//-----------------------------------------------------------------------------
+
+// Insert a node at the tail of the list
+int LinkedList::insertAtEnd(int value) {
+
+  // Create a new node
+  LinkedListNode node;
+  node.setNodeData(value);
+
+  if (isEmpty() == true) {
+    m_head =
+  }
+
+}
 
 //-----------------------------------------------------------------------------
 

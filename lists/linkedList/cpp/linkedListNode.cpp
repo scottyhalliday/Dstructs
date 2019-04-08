@@ -42,4 +42,3 @@ void LinkedListNode::setNodeData(int value) {
 void LinkedListNode::printNodeData() {
   std::cout << m_data << " -> ";
 }
-
