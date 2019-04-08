@@ -250,7 +250,8 @@ print_list()
 //
 // Remove a node from the list at specified 'index'
 //
-int remove_node(int index)
+int 
+remove_node(int index)
 {
     struct Node *n;
     struct Node *nprev;
@@ -313,7 +314,8 @@ int remove_node(int index)
 //
 // Remove a node from the end of the list
 //
-int remove_node_at_end()
+int 
+remove_node_at_end()
 {
     return(remove_node(LLIST_CNT-1));
 }

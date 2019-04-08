@@ -18,6 +18,8 @@ sections.
 1. **Lists**
    - Array List
    - Linked List
+   - Stacks
+   - Queues
 2. **Trees**
    - AVL Tree
    - Binary Search Tree

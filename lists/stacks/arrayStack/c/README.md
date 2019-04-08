@@ -1,5 +1,5 @@
 # Stack
-## Array List Implmentation
+## C Array List Implmentation
 
 This implementation of a stack is done using an array list.  The stack uses a fixed size.  If the size of the stack
 is exceeded then an error is thrown and the item is not added.  The implementations allow a stack of a specific type
