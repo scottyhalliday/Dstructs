@@ -28,11 +28,26 @@ the array by reallocating the array size but this is generally frowned upon sinc
 expensive operation.  This is one of the major pitfalls of this data structure but if your list size is
 known and not expected to change this data structure is one of the easiest to implement.
 
+### Inserting Item
+
 Data is inserted into the array list by either specifying the index or putting it at the end.  The data
 structure keeps track of the state of the data and knows when insertion is done correctly.  If done
 incorrectly then the user is made aware via an error message.
 
-The figure below shows the insertion process for an array list.
+The figure below shows the insertion process for an array list which is not full.
 
 ![alt text](./array_list2.png "Array List Data Structure Insertion 1")
+
+The figure below shows the insertion process for an array list which **IS** full.  Note that this operation
+will not succeed in this implementation.
+
 ![alt text](./array_list3.png "Array List Data Structure Insertion 2")
+
+### Deleting Item
+
+Data is deleted from the array list by deleting a specific index or by deleting the item by its value.  In
+both cases the validity of the call is checked and errors are issued if they occur.
+
+The figure below shows the deletion process.
+
+![alt text](./array_list4.png "Array List Data Structure Deletion")
