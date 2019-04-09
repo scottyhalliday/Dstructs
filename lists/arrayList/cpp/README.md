@@ -1,9 +1,8 @@
-# C Implementation of Array List Data Structure
+# C++ Implementation of Array List Data Structure
 
 The ArrayList is a fixed array-based list which can store any data type
-(consistent data type).  The implementation in C which means that to support
-different datatypes, separate implementations for each datatype needed to be
-created.  Supported datatypes are **int**, **double** and **string**.
+(consistent data type).  The implementation in C++ uses the template feature
+to allow single piece of code but usable for different datatypes.
 The features implemented for this data structure are described below.
 1. Create the list.  List is initialized to empty state
 2. Determine whether the list is full
@@ -23,25 +22,21 @@ To build the binaries (Linux) a makefile was created to easily compile the code.
 make
 ```
 
-This will build three seperate binaries, one for each data type.  The main method
-for each program will test the functionality of the implementation.  To run the 
-binaries simply invoke them from the shell.
+This will build a single binary.  The main method
+for the program will test the functionality of the implementation.  To run the 
+binary simply invoke it from the shell.
 
 ```bash
-./intArrayList
-./doubleArrayList
-./strArrayList
+./arrayList
 ```
 
-Additionally, you can build the binaries with debugging to pass to a memory leak
+Additionally, you can build the binary with debugging to pass to a memory leak
 detection program such as Valgrind.  You must have Valgrind installed to take
 advantage of this.
 
 ```bash
 make debug
-../../../valigrind_debug ./intArrayList
-../../../valigrind_debug ./doubleArrayList
-../../../valigrind_debug ./strArrayList
+../../../valigrind_debug ./arrayList
 ```
 
-Compiled against gcc 7.3.0
+Compiled against g++ 7.3.0
