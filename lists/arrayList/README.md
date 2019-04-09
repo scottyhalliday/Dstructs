@@ -1,17 +1,23 @@
-ARRAYLIST DATA STRUCTURE
-~Scott Hall
+# Array List Data Structure
 
-This directory contains the various implementations of an Array List data
-structure.  In a nutshell, the Array List data structure is designed to create
-an array which can be populated with content.  The array list can be
-constructed using three different data types, integer, float and string.
-Scripting languages (i.e. Python, Ruby, etc.) allow dynamic typing so lists
-can conceivably contain multiple different data types.  The ability to keep
-the list data types strict (i.e. a single data type per list) is enabled.
+The contents within this directory are implementations of the array list data structure.  This data structure
+uses the languages built in array functionality to build the data structure.  Each language will build the
+data structure for three data types.
+1. Integer
+2. Double (Floating Point) 
+3. String
 
-Some of the core constraints of the data structure include, no duplicates and
-the list is not ordered.  Each language's implementations are stand alone
-meaning there are no other Dstructs packages required.  Each language supports
-the three main data types integers, floats and strings.  Each implementation
-comes with a brief testing script to see how its usage goes.  If the
-implementation is a compiled language then a makefile will be provided.
+For languages that support dynamic typing (i.e. Python, Ruby, etc.) these three types can easily coexist
+in a single implementation.  For non-dynamic languages (i.e. C, Go, etc.) three seperate implementations
+exist for the three types.  C++ implementation uses templates and lets the precompiler take care of the
+three type builds while Java uses generic Objects to implement the data structure.  
+
+## Implementation
+
+At the core an array list data structure uses an array to store and manage data.  Essentially it is more
+advanced wrapper around a normal array.  This data structure will manage the insertion and deletion of 
+data while ensuring that data is shifted appropriately to keep it sequential.  
+
+The figure below shows an example of the array list data structure.
+
+![alt text](./array_list1.png "Array List Data Structure Overview")
