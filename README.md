@@ -10,6 +10,7 @@ of data structures in the following languages.
 6. Python
 7. Ruby
 8. Rust
+9. TypeScript
 
 Given that there are **numerous** data structures there will be quite a bit of code located
 in this package.  I wish I had to time to get them all but I will focus mostly on the
@@ -18,8 +19,8 @@ sections.
 1. **Lists**
    - Array List
    - Linked List
-   - Stacks
-   - Queues
+   - Stacks (Implemented via Array List and Linked List)
+   - Queues (Implemented via Array List and Linked List)
 2. **Trees**
    - AVL Tree
    - Binary Search Tree
