@@ -22,17 +22,26 @@ The figure below shows an example of the array list data structure.
 
 ![alt text](./array_list1.png "Array List Data Structure Overview")
 
+The array list data structure is one of the easiest due to the implicit behavior of the array.  The 
+data structure implementation is really nothing more than a more advanced wrapper built around it to
+create an easy user interface to managing the data.  While this is one of the more simpler data 
+structures it does have some pitfalls which do not make it ideal for most applications.  This includes
+1. Array size must be initialized up front.  Most situations do not always know how much data will be stored.
+2. Unknown size give two options.  Initialize a very large array (wastes resources) or reallocate the
+array size (expensive operation).
+3. Should you want to create a list of multiple data types, this can be difficult or impossible in some langauges
+
 This implementation requires the initial size of the array list when initiated.  Once the list is full
-it will not allow any more additions until space is cleared.  In theory one could make more space in 
-the array by reallocating the array size but this is generally frowned upon since this can be an 
-expensive operation.  This is one of the major pitfalls of this data structure but if your list size is
-known and not expected to change this data structure is one of the easiest to implement.
+it will not allow any more additions until space is cleared.  
 
 ### Inserting Item
 
 Data is inserted into the array list by either specifying the index or putting it at the end.  The data
 structure keeps track of the state of the data and knows when insertion is done correctly.  If done
 incorrectly then the user is made aware via an error message.
+
+If inserting an item in the middle of the list then the program will first shift the contents of the 
+list over starting from the insertion index and then place the new value in the specified index.
 
 The figure below shows the insertion process for an array list which is not full.
 
