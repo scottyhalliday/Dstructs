@@ -1,12 +1,12 @@
 /*
- * INT_QUEUE_ARRAY.C
+ * FLOAT_QUEUE_ARRAY.C
  *
  * Author       : Scott Hall
  * Contributors : Scott Hall (Github: smhall316)
  *                (Please add your name if you contribute)
  *
  * Description:
- * Implementation of an integer type queue using the array list data structure.  
+ * Implementation of an double floating point type queue using the array list data structure.  
  * The queue is a fixed length array list.  If the queue is full and another
  * item is added an error will occur.  This implementation will not allocate
  * more memory for queue overflow, it will simply disregard the enqueue.
@@ -15,7 +15,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "include/int_queue_array.h"
+#include "include/float_queue_array.h"
 
 // ----------------------------------------------------------------------------
 int
@@ -53,7 +53,7 @@ initialize_queue(int size)
 
     queue->size  = size;
     queue->index = 0;
-    queue->queue = (int *) calloc(size, sizeof(int));
+    queue->queue = (double *) calloc(size, sizeof(double));
 
     return queue;
 }
@@ -85,7 +85,7 @@ print_queue(struct array_queue *queue)
 
     for (i=0; i<queue->size; i++) {
         if (i < queue->index)
-            printf(" %5d ", queue->queue[i]);
+            printf(" %10.3f ", queue->queue[i]);
         else
             printf("   -   ");
 
@@ -125,7 +125,7 @@ print_queue_status(struct array_queue *queue)
 
 // ----------------------------------------------------------------------------
 int
-enqueue(int value, struct array_queue *queue)
+enqueue(double value, struct array_queue *queue)
 {
 
     if (is_full(queue) == 1) {
@@ -142,7 +142,7 @@ enqueue(int value, struct array_queue *queue)
 
 // ----------------------------------------------------------------------------
 int
-dequeue(struct array_queue *queue, int *pvalue)
+dequeue(struct array_queue *queue, double *pvalue)
 {
     if (is_empty(queue) == 1) {
         printf("** ERROR ** :: DEQUEUE :: queue is empty, cannot get any more items\n");
@@ -190,7 +190,7 @@ remove_at_index(int index, struct array_queue *queue)
 int
 main(int argc, char **argv)
 {
-    int pvalue;
+    double pvalue;
     struct array_queue *queue;
 
     printf("\n\nINTEGER QUEUE ARRAY IN C\n\n");
@@ -215,7 +215,7 @@ main(int argc, char **argv)
 
     printf("dequeue the top value at the start of the queue\n");
     dequeue(queue, &pvalue);
-    printf("dequeued '%5d' from the queue\n", pvalue);
+    printf("dequeued '%10.3f' from the queue\n", pvalue);
     print_queue_status(queue);
 
     printf("enqueue 11 to the full queue\n");
