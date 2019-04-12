@@ -1,7 +1,7 @@
 # Stacks
 
 Stacks are more a less a list with some very specific rules.  A stack works on the 
-First-In-First-Out (FIFO) principle.  As with most things in computing, there is 
+Last-In-First-Out (LIFO) principle.  As with most things in computing, there is 
 more than one way to implement things.  The issue becomes for which situation is one
 way better than the other.
 
