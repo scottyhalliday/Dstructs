@@ -1,0 +1,12 @@
+default:
+	gcc -Wall int_binary_tree.c -o int_binary_tree
+
+debug:
+	gcc -Wall -g int_binary_tree.c -o int_binary_tree
+
+clean:
+	echo "Cleaning up...."
+	rm -f int_binary_tree
+	rm -f float_binary_tree
+	rm -f string_binary_tree
+	echo "Done!"
