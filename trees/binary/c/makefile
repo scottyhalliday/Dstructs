@@ -1,8 +1,8 @@
 default:
-	gcc -Wall int_binary_tree.c -o int_binary_tree
+	gcc -Wall int_binary_tree.c -o int_binary_tree -lm
 
 debug:
-	gcc -Wall -g int_binary_tree.c -o int_binary_tree
+	gcc -Wall -g int_binary_tree.c -o int_binary_tree -lm
 
 clean:
 	echo "Cleaning up...."
