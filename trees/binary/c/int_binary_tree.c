@@ -7,6 +7,16 @@
  *
  * Description:
  * Implementation of an integer binary tree.  
+ *
+ * This implementation is simply a conceptual binary tree.  It does not follow
+ * the deletion and insertion rules of any one type of binary tree (BST, AVL, etc)
+ * The left child has precedence in insertion and deletion.  That means there 
+ * will always be a left child before a right child.  There is no specific reason
+ * other than I had to choose something.  
+ * 
+ * This implementation helps to explore the concepts of tree such as it's left
+ * and right children, the parent node, tree depth, tree level, etc.  These 
+ * features will be used to develop more advanced and efficient trees.
  * 
  * ****R E F R E S H E R   B L O C K ******************************************
  * For a refresher recall how the '.' and '->' notations are used within C.  
@@ -61,6 +71,18 @@
 #include "include/int_binary_tree.h"
 
 // ----------------------------------------------------------------------------
+// Cleanup the binary tree and the memory it consumes
+void
+cleanup_binary_tree()
+{
+    // Delete the tree if not done so already
+    delete_tree();
+
+    // Free global NULL node
+    free(NULL_NODE);
+}
+
+// ----------------------------------------------------------------------------
 struct TreeNode* 
 create_new_node(int value)
 {
@@ -99,7 +121,6 @@ create_null_node(int value, struct TreeNode *parent)
     return new_node;
 
 }
-
 
 // ----------------------------------------------------------------------------
 // Delete a value from the tree.  Returns 1 if the value was succesfully deleted
@@ -183,17 +204,83 @@ delete_node(int value)
         }
     }
 
+    // Decrement the master node counter
+    NUM_TREE_NODES--;
+
+    // Free the memory the deleted node occupied
     free(node);
 
     return TRUE;
 
 }
 
+// ----------------------------------------------------------------------------
+// Deletes the tree and frees all associated memory.  This delete process
+// firsts visits every node and adds them to a stack.  Then once all nodes are
+// discovered their memory is freed and the ROOT is set back to NULL.  This
+// is a more efficient means to delete the tree instead of deleting each node
+// and rearranging the tree.
+int
+delete_tree()
+{
+
+    int size;
+    struct TreeNode *node;
+    struct TreeNode **stack;
+
+    // If tree is empty then nothing to do here
+    if (ROOT == NULL)
+    {
+        return TRUE;
+    }
+
+    // Add each node to delete to the stack
+    stack = (struct TreeNode**) malloc(sizeof(struct TreeNode *)*NUM_TREE_NODES);
+    size = 0;
+
+    stack[0] = ROOT;
+    size++;
+
+    while (size != 0)
+    {
+
+        // Pop the next node from the stack
+        node = stack[size-1];
+        size--;
+
+        if (node->left_child != NULL)
+        {
+            stack[size] = node->left_child;
+            size++;
+        }
+
+        if (node->right_child != NULL)
+        {
+            stack[size] = node->right_child;
+            size++;
+        }
+
+        // Free the memory
+        free(node);
+    }
+
+    // Free the memory for the stack
+    free(stack);
+
+    // Reset the master counter and reset ROOT
+    NUM_TREE_NODES = 0;
+    ROOT = NULL;
+
+    return TRUE;
+
+}
+
+// ----------------------------------------------------------------------------
+// Rearranges the nodes keeping left child precendence in mind.  Upon node
+// deletion the nodes must be rearranged so that the tree remains intact.
 void
 rearrange_nodes(struct TreeNode *lnode, struct TreeNode *rnode)
 {
-
-    struct TreeNode* node;
 
     // If either of the nodes passed are NULL then there is nothing to do
     if (lnode == NULL || rnode == NULL)
@@ -297,6 +384,14 @@ find_open_leaf(struct TreeNode* node)
 }
 
 // ----------------------------------------------------------------------------
+// Return the number of nodes in the tree
+int 
+get_number_of_nodes()
+{
+    return NUM_TREE_NODES;
+}
+
+// ----------------------------------------------------------------------------
 void
 initialize_binary_tree()
 {
@@ -323,6 +418,7 @@ insert_node(int value)
     if (ROOT == NULL)
     {
         ROOT = new_node;
+        NUM_TREE_NODES++;
         return 0;
     }
 
@@ -438,14 +534,26 @@ print_tree()
     struct TreeNode **queue;
     struct TreeNode **null_stack;
     struct TreeNode *this_node;
-    struct TreeNode *null_node;
 
     // Determine the print spacing for each level of the tree
     depth = tree_depth(ROOT);
 
+    // Print summary of tree
+    printf("-------------------------------------------------------------------\n");
+    printf("Current Tree Structure\n");
+    printf("Tree Depth: %d\n", depth);
+    printf("Tree Nodes: %d\n\n", NUM_TREE_NODES);
+
+    // If tree is empty then we are done
+    if (depth == 0)
+    {
+        printf("Tree is empty\n");
+        return;
+    }
+
     // Intialize each levels print spacing
     pre_spacing = (int *) calloc(depth, sizeof(int));
-    mid_spacing  = (int *) calloc(depth, sizeof(int));
+    mid_spacing = (int *) calloc(depth, sizeof(int));
 
     // Calculate the number of nodes based on actual tree levels.  (NOTE: This 
     // will count NULL children)
@@ -461,7 +569,7 @@ print_tree()
     max_chars = cformat*num_nodes + num_nodes-1;
 
     // Initialize the string array which will draw the tree leader lines
-    leader_lines = (char *) malloc(sizeof(char)*max_chars);
+    leader_lines = (char *) malloc(sizeof(char)*(max_chars+1));
 
     for (i=0; i<max_chars; i++)
     {
@@ -519,6 +627,13 @@ print_tree()
             qsize--;
         }
 
+        // If the tree only consists of the root then print it and quit
+        if (this_node == ROOT && NUM_TREE_NODES == 1)
+        {
+            printf("%5d\n\n", data);
+            break;
+        }
+
         // Put the children on the queue (If they are dummy children)
         if (is_null_node == FALSE)
         {
@@ -556,15 +671,16 @@ print_tree()
 
         }
 
-        // Print the pre spacing if this is the start of a new line
-        if (nprint == 0) 
-        {
-            for (i=0; i<pre_spacing[this_level-1]; i++) {
-                printf(" ");
-            }
-        }
-
         if (this_level <= depth) {
+            
+            // Print the pre spacing if this is the start of a new line
+            if (nprint == 0) 
+            {
+                for (i=0; i<pre_spacing[this_level-1]; i++) {
+                    printf(" ");
+                }
+            }
+
             if (is_null_node == TRUE)
             {
                 for (i=0; i<cformat; i++)
@@ -636,20 +752,25 @@ print_tree()
                     }
                 }
             }
-        }
 
-        // Print mid-spacing
-        for (i=0; i<mid_spacing[this_level-1]; i++)
-        {
-            printf(" ");
+            // Print mid-spacing
+            for (i=0; i<mid_spacing[this_level-1]; i++)
+            {
+                printf(" ");
+            }
+            nprint++;
+
         }
-        nprint++;
 
         // Move to a new line?
         if (nprint >= pow(2, this_level-1)) 
         {
             printf("\n");
             nprint = 0;
+
+            // Terminate the leader line string
+            leader_lines[j] = '\0';
+
             j = 0;
 
             // Print the leader lines
@@ -664,12 +785,6 @@ print_tree()
                 leader_lines[i] = ' ';
             }   
         }
-
-        // If this node was NULL node then free its memory.  It has served its purpose
-        if (is_null_node == TRUE) {
-            //free(this_node);
-        }
-
     }
 
     // Finally print a new line
@@ -680,6 +795,12 @@ print_tree()
     free(pre_spacing);
     free(mid_spacing);
     free(leader_lines);
+
+    for (i=0; i<nsize; i++)
+    {
+        free(null_stack[i]);
+    }
+    free(null_stack);
 
 }
 
@@ -736,110 +857,76 @@ int
 main(int argc, char **argv)
 {
     int i;
-    int result;
     struct TreeNode *node;
 
-    printf("C Implementation of Integer Binary Tree\n");
+    printf("\n\nC Implementation of Integer Binary Tree\n\n");
 
+    // Initialize the binary tree.  This sets some global variables used by the
+    // binary tree instance.  Failure to call this will result in errors
     initialize_binary_tree();
 
-    // Build the tree
+    // Build the tree applying random values
     for (i=1; i<=21; i++) {
         insert_node(i);
     }
 
-    result = value_exists(ROOT,1);
-    printf("result = %d\n", result);
-
-
-    printf("Number of nodes is %d\n", NUM_TREE_NODES);
+    printf("Number of nodes is %d\n", get_number_of_nodes());
     print_tree();
 
-    printf("Fetching 6 from the tree\n");
-    node = fetch_node(ROOT,6);
-    printf("node->data = %d\n", node->data);
-
-    printf("Fetching 26 from the tree\n");
-    if (value_exists(ROOT, 26))
-    {
-        node = fetch_node(ROOT,26);
-    }
-
-    delete_node(16);
-    print_tree();
-
-
-    delete_node(9);
-    print_tree();
-
-
-    delete_node(4);
-    print_tree();
-
+    printf("\n\n### Now let's delete 5 from the tree\n\n");
     delete_node(5);
     print_tree();
 
-    delete_node(20);
-    print_tree();
-
-    delete_node(6);
-    print_tree();
-
-    delete_node(21);
-    print_tree();
-
-    delete_node(1);
-    print_tree();
-
-    delete_node(17);
-    print_tree();
-
-    delete_node(7);
-    print_tree();
-
-    delete_node(15);
-    print_tree();
-
-    insert_node(15);
-    print_tree();
-
-    insert_node(150);
-    print_tree();
-
-    delete_node(2);
-    print_tree();
-
-    delete_node(8);
-    print_tree();
-
-    delete_node(18);
-    print_tree();
-
-    delete_node(19);
-    print_tree();
-
-    delete_node(15);
-    print_tree();
-
-    delete_node(10);
-    print_tree();
-
-    delete_node(11);
-    print_tree();
-
-    delete_node(150);
-    print_tree();
-
-    delete_node(3);
-    print_tree();
-
-    delete_node(12);
-    print_tree();
-
+    printf("\n\n### Now let's delete 13 from the tree\n\n");
     delete_node(13);
     print_tree();
 
-    delete_node(14);
+    printf("\n\n### Now let's delete 2 from the tree\n\n");
+    delete_node(2);
     print_tree();
 
+    printf("\n\n### Now let's INSERT 2 back into the tree\n\n");
+    insert_node(2);
+    print_tree();
+
+    printf("\n\n### Now let's look for a 10 in the tree\n\n");
+    if (value_exists(ROOT, 10))
+    {
+        node = fetch_node(ROOT, 10);
+        printf("Searching for 10 in the tree, node found is %d\n\n", node->data);
+    }
+    else
+    {
+        printf("NODE 10 does not exist\n\n");
+    }
+
+    printf("\n\n### Now let's look for 100.  It is NOT in the tree\n\n");
+    if (value_exists(ROOT, 100))
+    {
+        node = fetch_node(ROOT, 100);
+        printf("Searching for 100 in the tree, node found is %d\n\n", node->data);
+    }
+    else
+    {
+        printf("NODE 100 does not exist\n\n");
+    }
+
+    printf("\n\n### Now let's delete the tree\n\n");
+    delete_tree();
+    print_tree();
+
+    printf("\n\n### Now let's build a new tree...A new bigger tree\n\n");
+    
+    // Build the tree applying random values
+    for (i=1; i<=50; i++) {
+        insert_node(i);
+    }
+    print_tree();
+
+    printf("\n\n### Now let's delete 5 from the tree\n\n");
+    delete_node(5);
+    print_tree();
+
+    printf("\n\n### Now let's quit I have seen enough!!\n\n");
+    cleanup_binary_tree();
 }
