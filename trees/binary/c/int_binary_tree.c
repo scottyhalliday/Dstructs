@@ -889,6 +889,10 @@ main(int argc, char **argv)
     insert_node(2);
     print_tree();
 
+    printf("\n\n### Now let's delete 17 from the tree\n\n");
+    delete_node(17);
+    print_tree();
+
     printf("\n\n### Now let's look for a 10 in the tree\n\n");
     if (value_exists(ROOT, 10))
     {
