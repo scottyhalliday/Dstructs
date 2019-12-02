@@ -6,7 +6,13 @@
  *                (Please add your name if you contribute)
  *
  * Description:
- * Implementation of an integer binary search tree (BST).  
+ * Implementation of an integer binary search tree (BST).  This implementation
+ * of the binary tree uses pointers between parent and children.  This is
+ * done primarily to aid the printing of the tree itself.  It allows the 
+ * print algorithm to go up and down the tree to determine the tree print format.
+ * This approach can most likely be simplified as managing pointers between
+ * children and parents can become cumbersome and error prone.  However, I find
+ * it nice to visually see the tree so I can verify it is as I expect it.
  * 
  * ****R E F R E S H E R   B L O C K ******************************************
  * For a refresher recall how the '.' and '->' notations are used within C.  
@@ -50,9 +56,7 @@
  * 
  * I jump between programming languages and I usually forget these minor but
  * important details.  So this will help refresh my memory.
- * 
- * Since we are building a linked list we will want to work with pointers so
- * we can 'point' to other nodes!! 
+ *
  * ****************************************************************************
  */
 
@@ -60,6 +64,19 @@
 #include <stdlib.h>
 #include <math.h>
 #include "include/int_binary_search_tree.h"
+
+// ----------------------------------------------------------------------------
+// Cleans up the binary tree and ensures all memory is deallocated.  This
+// function is intended to be called when interacting with the tree.  This
+// will terminate the run.  If you want to simply destroy the tree and start
+// over, then call DESTROY_TREE()
+void
+cleanup_binary_tree()
+{
+    destroy_tree();
+    free(NULL_NODE);
+}
+
 
 // ----------------------------------------------------------------------------
 struct TreeNode* 
@@ -102,47 +119,13 @@ create_null_node(int value, struct TreeNode *parent)
 }
 
 // ----------------------------------------------------------------------------
-int
-delete_node(int value)
-{
-    struct TreeNode *node;
-    struct TreeNode *lnode;
-    struct TreeNode *rnode;
-    struct TreeNode *tnode;
-    struct TreeNode *pnode;
-
-    // Find the node with equal value
-    node = find_node(ROOT, value);
-
-    // Get the parent node
-    pnode = node->parent;
-
-    if (node->left_child != NULL) {
-        tnode = find_max_node(node->left_child);
-    }
-    else if (node->right_child != NULL)
-    {
-        tnode = find_max_node(node->right_child);
-    }
-
-    pnode->right_child = tnode;
-    tnode->parent      = pnode;
-
-
-    // Cleanup memory
-    free(node);
-
-    // Update node counter
-    NUM_TREE_NODES--;
-
-    return TRUE;
-
-}
-
+// Delete a node from the tree and reform links between children and parent nodes
+// to keep binary search tree in proper format.
 struct TreeNode*
-deleteNode(struct TreeNode *root, int value) 
+delete_node(struct TreeNode *root, int value) 
 {
 
+    struct TreeNode *temp;
     struct TreeNode *pnode;
 
     if (root == NULL)
@@ -155,13 +138,13 @@ deleteNode(struct TreeNode *root, int value)
     // If value is less than root, then move down the left subtree
     if (value < root->data)
     {
-        root->left_child = deleteNode(root->left_child, value);
+        root->left_child = delete_node(root->left_child, value);
     }
     
     // If the value is more than root, then move down right subtree
     else if (value > root->data)
     {
-        root->right_child = deleteNode(root->right_child, value);
+        root->right_child = delete_node(root->right_child, value);
     }
 
     // Otherwise, we have found the value
@@ -169,23 +152,9 @@ deleteNode(struct TreeNode *root, int value)
     {
         if (root->left_child == NULL)
         {
-            struct TreeNode *temp = root->right_child;
-//            if (root->right_child == NULL)
-//            {
-//                pnode->right_child = NULL;
-//            }
-//            else 
-//            {
-//                pnode->left_child = root->right_child;
-//                root->right_child->parent = pnode;
-//            }
+            temp = root->right_child;
 
-            if (root->right_child == NULL)
-            {
-                //pnode->right_child = NULL;
-                //pnode->left_child  = NULL;
-            }
-            else
+            if (root->right_child != NULL)
             {
                 if (pnode == NULL) {
                     ROOT = root->right_child;
@@ -207,25 +176,12 @@ deleteNode(struct TreeNode *root, int value)
             NUM_TREE_NODES--;
             return temp;
         }
+        
         else if (root->right_child == NULL)
         {
-            struct TreeNode *temp = root->left_child;
-            // if (root->left_child == NULL)
-            // {
-            //     pnode->left_child = NULL;    
-            // }
-            // else
-            // {
-            //     pnode->right_child = root->left_child;
-            //     root->left_child->parent = pnode;
-            // }
+            temp = root->left_child;
             
-            if (root->left_child == NULL)
-            {
-                //pnode->right_child = NULL;
-                //pnode->left_child  = NULL;
-            }
-            else
+            if (root->left_child != NULL)
             {
                 if (pnode == NULL) {
                     ROOT = root->left_child;
@@ -254,24 +210,57 @@ deleteNode(struct TreeNode *root, int value)
 
         root->data = temp->data;
 
-        root->right_child = deleteNode(root->right_child, temp->data);
+        root->right_child = delete_node(root->right_child, temp->data);
     }
 
     return root;
 }
 
 // ----------------------------------------------------------------------------
-struct TreeNode*
-reassign_nodes(struct TreeNode *pnode, struct TreeNode *node)
+// Destroy all nodes and reset ROOT
+int
+destroy_tree()
 {
-    struct TreeNode *temp;
+    int    node_cnt;
 
-    if (node->data > pnode->data)
+    struct TreeNode  *node;
+    struct TreeNode **node_stack;
+
+    // If tree is empty then we are done
+    if (NUM_TREE_NODES == 0)
     {
-        pnode->right_child = node;
-        node->parent       = pnode;
+        printf("Tree is empty\n");
+        return TRUE;
     }
 
+    // Initialize a null stack to store null nodes so we can clean them up later
+    node_stack = (struct TreeNode **) malloc(sizeof(struct TreeNode*)*NUM_TREE_NODES);
+    node_stack[0] = ROOT;
+    node_cnt = 1;
+
+    while (node_cnt > 0)
+    {
+        node = node_stack[node_cnt-1];
+        node_cnt--;
+
+        if (node->left_child != NULL)
+        {
+            node_stack[node_cnt] = node->left_child;
+            node_cnt++;
+        }
+
+        if (node->right_child != NULL)
+        {
+            node_stack[node_cnt] = node->right_child;
+            node_cnt++;
+        }
+
+        free(node);
+    }
+
+    free(node_stack);
+
+    return TRUE;
 }
 
 // ----------------------------------------------------------------------------
@@ -438,13 +427,6 @@ print_tree()
     struct TreeNode **queue;
     struct TreeNode **null_stack;
     struct TreeNode *this_node;
-
-    if (ROOT == NULL)
-    {
-        printf("ROOT IS NULL\n");
-    } else {
-        printf("ROOT IS NOT NULL\n");
-    }
 
     // Determine the print spacing for each level of the tree
     depth = tree_depth(ROOT);
@@ -774,7 +756,6 @@ main(int argc, char **argv)
 
     int i;
     int tree[12] = {11,4,5,3,10,26,35,12,1,15,34,13};
-    struct TreeNode *temp;
 
     initialize_binary_tree();
 
@@ -787,75 +768,14 @@ main(int argc, char **argv)
     }
 
     // Delete some of the nodes in no particular order
-    printf("*** DELETING 26\n");
-    deleteNode(ROOT,26);
-    print_tree();
+    for (i=0; i<12; i++)
+    {
+        printf("*** DELETING %2d\n", tree[i]);
+        delete_node(ROOT, tree[i]);
+        print_tree();
+    }
 
-    temp = find_node(ROOT, 34);
-    printf(" Node 34 parent: %d, left: %d, right: %d\n", temp->parent->data, temp->left_child->data, temp->right_child->data);
-
-    fprintf(stderr, "\n\n\n");
-
-    printf("*** DELETING 4\n");
-    deleteNode(ROOT,4);
-    print_tree();
-    printf(" Node 34 parent: %d, left: %d, right: %d\n", temp->parent->data, temp->left_child->data, temp->right_child->data);
-
-    fprintf(stderr, "\n\n\n");
-
-    printf("*** DELETING 12\n");
-    deleteNode(ROOT,12);
-    print_tree();
-    printf(" Node 34 parent: %d, left: %d, right: %d\n", temp->parent->data, temp->left_child->data, temp->right_child->data);
-
-    fprintf(stderr, "\n\n\n");
-
-    printf("*** DELETING 15\n");
-    deleteNode(ROOT,15);
-    print_tree();
-    printf(" Node 34 parent: %d, left: %d, right: %d\n", temp->parent->data, temp->left_child->data, temp->right_child->data);
-
-    temp = find_node(ROOT, 5);
-    printf(" Node 5 parent: %d, left: %d, right: %d\n", temp->parent->data, temp->left_child->data, temp->right_child->data);
-
-    printf("*** DELETING 10\n");
-    deleteNode(ROOT,10);
-    print_tree();
-
-    //temp = find_node(ROOT, 5);
-    //printf(" Node 5 parent: %d, left: %d, right: %d\n", temp->parent->data, temp->left_child->data, temp->right_child->data);
-
-    printf("*** DELETING 34\n");
-    deleteNode(ROOT,34);
-    print_tree();
-
-    printf("*** DELETING 11\n");
-    deleteNode(ROOT,11);
-    print_tree();
-
-    printf("*** DELETING 1\n");
-    deleteNode(ROOT,1);
-    print_tree();
-
-    printf("*** DELETING 35\n");
-    deleteNode(ROOT,35);
-    print_tree();
-
-    printf("*** DELETING 5\n");
-    deleteNode(ROOT,5);
-    print_tree();
-
-    fprintf(stderr, "\n\n****************************\n");
-
-    printf("*** DELETING 13\n");
-    deleteNode(ROOT,13);
-    print_tree();
-
-
-    printf("*** DELETING 3\n");
-    deleteNode(ROOT,3);
-    print_tree();
-
+    cleanup_binary_tree();
 
     return 0;
 }

@@ -25,9 +25,11 @@ struct TreeNode *ROOT;          // The root node of the tree
 struct TreeNode *NULL_NODE;     // A general usage Null node 
 int NUM_TREE_NODES;
 
+void             cleanup_binary_tree();
 struct TreeNode* create_new_node(int);
 struct TreeNode* create_null_node(int, struct TreeNode*);
-int              delete_node(int);
+struct TreeNode* delete_node(struct TreeNode*, int);
+int              destroy_tree();
 struct TreeNode* find_max_node(struct TreeNode*);
 struct TreeNode* find_min_node(struct TreeNode*);
 struct TreeNode* find_node(struct TreeNode*, int);
@@ -38,6 +40,4 @@ int              node_level(struct TreeNode*);
 void             print_tree();
 int              tree_depth(struct TreeNode*);
 int              value_exists(struct TreeNode*, int);
-struct TreeNode* reassign_node(struct TreeNode*, struct TreeNode*);
-struct TreeNode* deleteNode(struct TreeNode*, int);
 
