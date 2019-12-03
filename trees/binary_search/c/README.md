@@ -1,5 +1,5 @@
-# Generic Binary Tree
-## C Binary Tree Implementation
+# Binary Search Tree
+## C Binary Search Tree Implementation
 
 The C implementation of the binary tree consists of three data types:
 1. Integer
@@ -22,9 +22,9 @@ make
 Once the makefile has completed the binaries can be run.
 
 ```bash
-./int_binary_tree
-./float_binary_tree
-./string_binary_tree
+./int_binary_search_tree
+./float_binary_search_tree
+./string_binary_search_tree
 ```
 
 Additionally, the makefile also includes commands for compiling with debug mode.  This is useful if you want
@@ -33,9 +33,9 @@ fix them.
 
 ```bash
 make debug
-valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./int_binary_tree
-valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./float_binary_tree
-valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./string_binary_tree
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./int_binary_search_tree
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./float_binary_search_tree
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./string_binary_search_tree
 ```
 
 You can quickly remove all built binaries by calling the *clean* tag in the makefile.
