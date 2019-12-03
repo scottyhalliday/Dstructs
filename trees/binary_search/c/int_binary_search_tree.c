@@ -160,7 +160,7 @@ delete_node(struct TreeNode *root, int value)
                     ROOT = root->right_child;
                     root->right_child->parent = NULL;
                 }
-                if (root->right_child->data > pnode->data)
+                else if (root->right_child->data > pnode->data)
                 {
                     pnode->right_child = root->right_child;
                     root->right_child->parent = pnode;
@@ -189,8 +189,8 @@ delete_node(struct TreeNode *root, int value)
                 }
                 else if (root->left_child->data > pnode->data)
                 {
-                    pnode->right_child = root->right_child;
-                    root->right_child->parent = pnode;
+                    pnode->right_child = root->left_child;
+                    root->left_child->parent = pnode;
                 }
                 else
                 {

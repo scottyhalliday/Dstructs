@@ -1,12 +1,12 @@
 /*
- * FLOAT_BINARY_SEARCH_TREE.C
+ * STRING_BINARY_SEARCH_TREE.C
  *
  * Author       : Scott Hall
  * Contributors : Scott Hall (Github: smhall316)
  *                (Please add your name if you contribute)
  *
  * Description:
- * Implementation of an floating point/double binary search tree (BST).  
+ * Implementation of an string point/double binary search tree (BST).  
  * This implementation of the binary tree uses pointers between parent and 
  * children.  This is done primarily to aid the printing of the tree itself.  
  * It allows the print algorithm to go up and down the tree to determine 
@@ -14,6 +14,12 @@
  * managing pointers between children and parents can become cumbersome and 
  * error prone.  However, I find it nice to visually see the tree so I can 
  * verify it is as I expect it.
+ *
+ * WARNING:  As the tree grows in depth the print_tree() function will
+ * format the print to make space for ALL possible nodes.  As the depth
+ * increases the amount of formatting increases exponentially.  That being
+ * said, you may need to pipe output to a file and view it in a text 
+ * editor instead of the terminal.
  * 
  * ****R E F R E S H E R   B L O C K ******************************************
  * For a refresher recall how the '.' and '->' notations are used within C.  
@@ -64,7 +70,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "include/float_binary_search_tree.h"
+#include <string.h>
+#include "include/string_binary_search_tree.h"
 
 // ----------------------------------------------------------------------------
 // Cleans up the binary tree and ensures all memory is deallocated.  This
@@ -75,23 +82,26 @@ void
 cleanup_binary_tree()
 {
     destroy_tree();
+    free(NULL_NODE->data);
     free(NULL_NODE);
 }
 
 
 // ----------------------------------------------------------------------------
 struct TreeNode* 
-create_new_node(double value)
+create_new_node(char *value)
 {
     struct TreeNode *new_node;
 
-    new_node = (struct TreeNode *) malloc(sizeof(struct TreeNode));    
+    new_node = (struct TreeNode *) malloc(sizeof(struct TreeNode)); 
     
     new_node->parent      = NULL;
     new_node->left_child  = NULL;
     new_node->right_child = NULL;
     
-    new_node->data    = value;
+    new_node->data    = (char *) calloc(strlen(value)+1, sizeof(char));
+    strcpy(new_node->data, value);
+
     new_node->is_null = FALSE;
 
     return new_node;
@@ -102,7 +112,7 @@ create_new_node(double value)
 // Create a NULL (Dummy) node.  This serves as a way to pass NULL children to
 // the print queue.
 struct TreeNode* 
-create_null_node(double value, struct TreeNode *parent)
+create_null_node(char *value, struct TreeNode *parent)
 {
     struct TreeNode *new_node;
 
@@ -112,7 +122,9 @@ create_null_node(double value, struct TreeNode *parent)
     new_node->left_child  = NULL;
     new_node->right_child = NULL;
     
-    new_node->data    = value;
+    new_node->data    = (char *) calloc(strlen(value)+1, sizeof(char));
+    strcpy(new_node->data, value);
+
     new_node->is_null = TRUE;
 
     return new_node;
@@ -123,7 +135,7 @@ create_null_node(double value, struct TreeNode *parent)
 // Delete a node from the tree and reform links between children and parent nodes
 // to keep binary search tree in proper format.
 struct TreeNode*
-delete_node(struct TreeNode *root, double value) 
+delete_node(struct TreeNode *root, char *value) 
 {
 
     struct TreeNode *temp;
@@ -134,23 +146,31 @@ delete_node(struct TreeNode *root, double value)
         return root;
     }
 
+    // Check if the value exists in the tree
+    if (value_exists(ROOT, value) == FALSE) 
+    {
+        printf("DELETE ERROR:  Value '%s' does not exist in the tree.  Nothing to delete!!\n", value);
+        return ROOT;
+    }
+
     pnode = root->parent;
 
     // If value is less than root, then move down the left subtree
-    if (value < root->data)
+    if (strcmp(value, root->data) < 0)
     {
         root->left_child = delete_node(root->left_child, value);
     }
     
     // If the value is more than root, then move down right subtree
-    else if (value > root->data)
+    else if (strcmp(value,root->data) > 0)
     {
         root->right_child = delete_node(root->right_child, value);
     }
+        
 
     // Otherwise, we have found the value
     else
-    {
+    { 
         if (root->left_child == NULL)
         {
             temp = root->right_child;
@@ -161,7 +181,7 @@ delete_node(struct TreeNode *root, double value)
                     ROOT = root->right_child;
                     root->right_child->parent = NULL;
                 }
-                else if (root->right_child->data > pnode->data)
+                else if (strcmp(root->right_child->data,pnode->data) > 0)
                 {
                     pnode->right_child = root->right_child;
                     root->right_child->parent = pnode;
@@ -172,7 +192,8 @@ delete_node(struct TreeNode *root, double value)
                     root->right_child->parent = pnode;
                 }
             }
-
+            
+            free(root->data);
             free(root);
             NUM_TREE_NODES--;
             return temp;
@@ -183,12 +204,12 @@ delete_node(struct TreeNode *root, double value)
             temp = root->left_child;
             
             if (root->left_child != NULL)
-            {
+            {   
                 if (pnode == NULL) {
                     ROOT = root->left_child;
                     root->left_child->parent = NULL;
                 }
-                else if (root->left_child->data > pnode->data)
+                else if (strcmp(root->left_child->data, pnode->data) > 0)
                 {
                     pnode->right_child = root->left_child;
                     root->left_child->parent = pnode;
@@ -199,7 +220,8 @@ delete_node(struct TreeNode *root, double value)
                     root->left_child->parent = pnode;
                 }
             }
-            
+
+            free(root->data);
             free(root);
             NUM_TREE_NODES--;
             return temp;
@@ -256,11 +278,16 @@ destroy_tree()
             node_cnt++;
         }
 
+        free(node->data);
         free(node);
+        NUM_TREE_NODES--;
     }
 
     free(node_stack);
 
+    // Reset the root
+    ROOT = NULL;
+    
     return TRUE;
 }
 
@@ -292,14 +319,14 @@ find_min_node(struct TreeNode *node)
 
 // ----------------------------------------------------------------------------
 struct TreeNode*
-find_node(struct TreeNode *node, double value)
+find_node(struct TreeNode *node, char *value)
 {
-    if (value == node->data)
+    if (strcmp(value, node->data) == 0)
     {
         return node;
     }
 
-    if (value > node->data)
+    if (strcmp(value, node->data) > 0)
     {
         return find_node(node->right_child, value);
     }
@@ -311,7 +338,7 @@ void
 initialize_binary_tree()
 {
     ROOT           = NULL;
-    NULL_NODE      = create_null_node(0,NULL);
+    NULL_NODE      = create_null_node("NULL_NODE",NULL);
     NUM_TREE_NODES = 0;
 }
 
@@ -320,7 +347,7 @@ initialize_binary_tree()
 // of a binary search tree in that there will be no duplicates, the root node
 // is greater than its left child but less than its right child
 int
-insert_node(double value)
+insert_node(char *value)
 {
     struct TreeNode *node;
     struct TreeNode *new_node;
@@ -336,7 +363,7 @@ insert_node(double value)
     // Make sure we don't allow duplicates
     if (value_exists(ROOT, value) == TRUE)
     {
-        printf("INSERT ERROR: Value '%7.2f' already exists in the tree.  No duplicates!\n", value);
+        printf("INSERT ERROR: Value '%10s' already exists in the tree.  No duplicates!\n", value);
         return FALSE;
     }
 
@@ -344,7 +371,7 @@ insert_node(double value)
     node     = find_open_spot(ROOT, value);
     new_node = create_new_node(value);
 
-    if (value > node->data)
+    if (strcmp(value, node->data) > 0)
     {
         node->right_child = new_node;
     }
@@ -360,11 +387,14 @@ insert_node(double value)
 }
 
 // ----------------------------------------------------------------------------
+// Following the rules for a binary search tree, find the next available
+// spot in the tree to place the new value.
 struct TreeNode*
-find_open_spot(struct TreeNode *node, double value)
+find_open_spot(struct TreeNode *node, char *value)
 {
+
     // Smaller values go to the left children
-    if (value < node->data)
+    if (strcmp(value, node->data) < 0)
     {
         if (node->left_child == NULL)
         {
@@ -382,6 +412,7 @@ find_open_spot(struct TreeNode *node, double value)
 }
 
 // ----------------------------------------------------------------------------
+// Determine which level a specfic node is in
 int
 node_level(struct TreeNode *node)
 {
@@ -419,7 +450,7 @@ print_tree()
     int depth;
     int this_level;
     int is_null_node;
-    double data;
+    char *data;
 
     // Node queue
     int    tot_nodes;
@@ -459,7 +490,7 @@ print_tree()
     //
     // Calculate the spacing of characters for each level based on tree's maximum depth
     //
-    cformat   = 7;
+    cformat   = 10;
     max_chars = cformat*num_nodes + num_nodes-1;
 
     // Initialize the string array which will draw the tree leader lines
@@ -524,7 +555,7 @@ print_tree()
         // If the tree only consists of the root then print it and quit
         if (this_node == ROOT && NUM_TREE_NODES == 1)
         {
-            printf("%7.2f\n\n", data);
+            printf("%10s\n\n", data);
             break;
         }
 
@@ -539,7 +570,7 @@ print_tree()
             }
             else
             {
-                queue[qsize] = create_null_node(0, this_node);
+                queue[qsize] = create_null_node("NULL", this_node);
                 qsize++;
             }
 
@@ -551,16 +582,16 @@ print_tree()
             }
             else
             {
-                queue[qsize] = create_null_node(0, this_node);
+                queue[qsize] = create_null_node("NULL", this_node);
                 qsize++;
             }
         }
         else if (is_null_node == TRUE && this_level < depth)
         {
-            queue[qsize] = create_null_node(0, this_node);
+            queue[qsize] = create_null_node("NULL", this_node);
             qsize++;
 
-            queue[qsize] = create_null_node(0, this_node);
+            queue[qsize] = create_null_node("NULL", this_node);
             qsize++;
 
         }
@@ -584,7 +615,7 @@ print_tree()
             }
             else
             {
-                printf("%7.3f", data);
+                printf("%10s", data);
             }
 
             if (this_level < depth) 
@@ -692,6 +723,7 @@ print_tree()
 
     for (i=0; i<nsize; i++)
     {
+        free(null_stack[i]->data);
         free(null_stack[i]);
     }
     free(null_stack);
@@ -730,19 +762,19 @@ tree_depth(struct TreeNode *node)
 // Returns True if the value is in the tree starting at a give node, False
 // otherwise.
 int
-value_exists(struct TreeNode *node, double value) 
+value_exists(struct TreeNode *node, char *value) 
 {
     if (node == NULL)
     {
         return FALSE;
     }
-    else if (node->data == value)
+    else if (strcmp(node->data,value) == 0)
     {
         return TRUE;
     }
     else
     {
-        if (value > node->data)
+        if (strcmp(value, node->data) > 0)
         {
             return value_exists(node->right_child, value);
         }
@@ -754,29 +786,52 @@ value_exists(struct TreeNode *node, double value)
 int 
 main(int argc, char **argv)
 {
-
-    int i;
-    double tree[12] = {4.0,8.9,63.2,4.1,22.3,84.12,52.9,5.2,3.98,26.8,57.998,74.02};
-
+    
+    printf("Initializing the binary tree... ");
     initialize_binary_tree();
+    printf("Done\n");
 
     // Populate the tree
-    for (i=0; i<12; i++)
-    {
-        printf("*** INSERTING %7.2f\n", tree[i]);
-        insert_node(tree[i]);
-        print_tree();
-    }
+    insert_node("hello");
+    printf("Adding %s\n", "hello");
+    insert_node("this");
+    printf("Adding %s\n", "this");
+    insert_node("is");
+    printf("Adding %s\n", "is");
+    insert_node("cat");
+    printf("Adding %s\n", "cat");
+    insert_node("bear");
+    printf("Adding %s\n", "bear");
+    insert_node("bears");
+    printf("Adding %s\n", "bears");
+    insert_node("cats");
+    printf("Adding %s\n", "cats");
+    insert_node("zoo");
+    printf("Adding %s\n", "zoo");
+    
+    print_tree();
 
-    // Delete some of the nodes in no particular order
-    for (i=0; i<12; i++)
-    {
-        printf("*** DELETING %7.2f\n", tree[i]);
-        delete_node(ROOT, tree[i]);
-        print_tree();
-    }
+    printf("Deleting 'this' from tree\n");
+    delete_node(ROOT, "this");
+    print_tree();
 
+    printf("Deleting 'some' from tree\n");
+    delete_node(ROOT, "some");
+    print_tree();
+
+    printf("Deleting 'common' from tree\n");
+    delete_node(ROOT, "common");
+    print_tree();
+
+    printf("Deleting 'hello' from tree\n");
+    delete_node(ROOT, "hello");
+    print_tree();
+
+    printf("Cleaning up the tree... ");
     cleanup_binary_tree();
+    printf("Done!!\n\n");
+
+    print_tree();
 
     return 0;
 }
