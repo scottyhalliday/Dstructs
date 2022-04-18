@@ -12,15 +12,15 @@ import java.lang.Thread;
 
 // ------------------------------------------------------------------------------------------------
 // The tree node object
-class BinaryTreeNode {
+class BinaryTreeNode<T> {
 
-    int value;
+    T value;
     int level;
-    BinaryTreeNode left;
-    BinaryTreeNode right;
-    BinaryTreeNode parent;
+    BinaryTreeNode<T> left;
+    BinaryTreeNode<T> right;
+    BinaryTreeNode<T> parent;
 
-    public BinaryTreeNode(int value) {
+    public BinaryTreeNode(T value) {
         this.value  = value;
         this.left   = null;
         this.right  = null;
@@ -31,18 +31,18 @@ class BinaryTreeNode {
 }
 
 // ------------------------------------------------------------------------------------------------
-public class DstructsBinaryTree {
+public class DstructsBinaryTree<T> {
 
-    BinaryTreeNode root = null;
+    BinaryTreeNode<T> root = null;
 
     // A multi-purpose FIFO node queue
-    Queue<BinaryTreeNode> nodeQueue = new LinkedList<BinaryTreeNode>();
+    Queue<BinaryTreeNode<T>> nodeQueue = new LinkedList<BinaryTreeNode<T>>();
 
     // --------------------------------------------------------------------------------------------
     // Add a node to the first available node 
-    public BinaryTreeNode addNode(int value) {
+    public BinaryTreeNode<T> addNode(T value) {
 
-        BinaryTreeNode node = new BinaryTreeNode(value);
+        BinaryTreeNode<T> node = new BinaryTreeNode<T>(value);
 
         // If root is null then we have an empty tree.  Set value as root
         if (this.root == null) {
@@ -60,7 +60,7 @@ public class DstructsBinaryTree {
 
     // --------------------------------------------------------------------------------------------
     // Return the current root of the tree
-    public BinaryTreeNode getRoot() {
+    public BinaryTreeNode<T> getRoot() {
         return this.root;
     }
 
@@ -69,7 +69,7 @@ public class DstructsBinaryTree {
     // node and extracting its level paramater
     public int getMaxLevels() {
 
-        BinaryTreeNode node;
+        BinaryTreeNode<T> node;
 
         if (getRoot() == null) {
             System.out.println("getMaxLevels: Tree is empty, no levels to report");
@@ -83,17 +83,8 @@ public class DstructsBinaryTree {
     }
 
     // --------------------------------------------------------------------------------------------
-    // Check if a node is full.  This means its left and right children are not null
-    private boolean nodeFull(BinaryTreeNode node) {
-        if (node.left != null && node.right != null) {
-            return true;
-        }
-        return false;
-    }
-
-    // --------------------------------------------------------------------------------------------
     // Place the node in first available location at each level
-    private void insert(BinaryTreeNode node, BinaryTreeNode newNode) {
+    private void insert(BinaryTreeNode<T> node, BinaryTreeNode<T> newNode) {
 
         // Check if the node has an available child slot
         if (node.left == null) {
@@ -121,7 +112,7 @@ public class DstructsBinaryTree {
 
     // --------------------------------------------------------------------------------------------
     // Find a node for a given value.  If node doesn't exist then return null
-    public BinaryTreeNode findNode(BinaryTreeNode node, int value) {
+    public BinaryTreeNode<T> findNode(BinaryTreeNode<T> node, T value) {
 
         // Check if this node matches
         if (node.value == value) {
@@ -146,7 +137,7 @@ public class DstructsBinaryTree {
 
     // --------------------------------------------------------------------------------------------
     // Find deepest node in the tree
-    public BinaryTreeNode findDeepestNode(BinaryTreeNode node) {
+    public BinaryTreeNode<T> findDeepestNode(BinaryTreeNode<T> node) {
 
         if (node.left != null) {
             nodeQueue.add(node.left);
@@ -169,10 +160,10 @@ public class DstructsBinaryTree {
     // Find the number of nodes per level
     public int numNodesInLevel(int level) {
 
-        BinaryTreeNode node = getRoot();
+        BinaryTreeNode<T> node = getRoot();
 
         // Create a temporary queue to hold nodes =
-        Queue<BinaryTreeNode> queue = new LinkedList<>();
+        Queue<BinaryTreeNode<T>> queue = new LinkedList<>();
 
         int cnt = 0;
 
@@ -196,9 +187,9 @@ public class DstructsBinaryTree {
 
     // --------------------------------------------------------------------------------------------
     // Recursive function which finds the number of nodes for desired level
-    private int findNumNodesInLevel(Queue<BinaryTreeNode> queue, int level, int counter) {
+    private int findNumNodesInLevel(Queue<BinaryTreeNode<T>> queue, int level, int counter) {
 
-        BinaryTreeNode node;       
+        BinaryTreeNode<T> node;       
         
         if (queue.isEmpty()) {
             return counter;
@@ -225,11 +216,11 @@ public class DstructsBinaryTree {
 
     // --------------------------------------------------------------------------------------------
     // Remove a node.  Once a node is removed it is replaced with the bottom, right most node.
-    public void remove(int value) {
+    public void remove(T value) {
 
         // Find the node associated with the value
-        BinaryTreeNode node1 = findNode(this.root, value); // Node to delete
-        BinaryTreeNode node2 = findDeepestNode(getRoot()); // Node at bottom of tree to replace deleted node
+        BinaryTreeNode<T> node1 = findNode(this.root, value); // Node to delete
+        BinaryTreeNode<T> node2 = findDeepestNode(getRoot()); // Node at bottom of tree to replace deleted node
 
         // If node doesn't exist then error out
         if (node1 == null) {
@@ -310,7 +301,7 @@ public class DstructsBinaryTree {
     public void printTree(int numChars)  {
 
         // Variables needed to construct tree and report tree statistics
-        BinaryTreeNode node;
+        BinaryTreeNode<T> node;
         int level;
         int numSpaces; 
         int maxChars;
@@ -462,10 +453,10 @@ public class DstructsBinaryTree {
     // --------------------------------------------------------------------------------------------
     // Print each node details
     public void printNodeDetails()  {
-        BinaryTreeNode node;
-        BinaryTreeNode left;
-        BinaryTreeNode right;
-        BinaryTreeNode parent;
+        BinaryTreeNode<T> node;
+        BinaryTreeNode<T> left;
+        BinaryTreeNode<T> right;
+        BinaryTreeNode<T> parent;
 
         // Clear the node queue
         nodeQueue.clear();
@@ -483,25 +474,25 @@ public class DstructsBinaryTree {
             left   = node.left;
             right  = node.right;
             parent = node.parent;
-            
-            System.out.printf("NODE: %7d -- ", node.value);
+                   
+            System.out.printf("NODE: %7s -- ", String.valueOf(node.value));
 
             if (parent == null) {
                 System.out.printf("Parent:    NULL, ");
             } else {
-                System.out.printf("Parent: %7d, ", parent.value);
+                System.out.printf("Parent: %7s, ", String.valueOf(parent.value));
             }
 
             if (left == null) {
                 System.out.printf("Left:    NULL, ");
             } else {
-                System.out.printf("Left: %7d, ", left.value);
+                System.out.printf("Left: %7s, ", String.valueOf(left.value));
             }
 
             if (right == null) {
                 System.out.printf("Right:    NULL, ");
             } else {
-                System.out.printf("Right: %7d, ", right.value);
+                System.out.printf("Right: %7s, ", String.valueOf(right.value));
             }
 
             System.out.printf("Level: %4d\n", node.level);
@@ -518,133 +509,128 @@ public class DstructsBinaryTree {
     }
 
     public static void main(String[] args) {
-        DstructsBinaryTree tree = new DstructsBinaryTree();
-        // tree.addNode(1);
-        // tree.addNode(2);
-        // tree.addNode(3);
-        // tree.addNode(4);
-        // tree.addNode(5);
-        // tree.addNode(6);
-        // tree.addNode(7);
-        // tree.addNode(8);
-        // tree.addNode(9);
-        // tree.addNode(10);
-        // tree.addNode(11);
-        // tree.addNode(12);
-        // tree.addNode(13);
-        // tree.addNode(14);
-        // tree.addNode(15);
-        // tree.addNode(16);
-        // tree.addNode(17);
-        // tree.addNode(18);
-        // tree.addNode(19);
-        // tree.addNode(20);
-        // tree.printTree(4);
-        // BinaryTreeNode node = tree.findDeepestNode(tree.getRoot());
-        // if (node == null) {
-        //     System.out.println("UH OH!  No node");
-        // } else {
-        //     System.out.println("Deepest node is " + node.value);
-        // }        
-        // System.out.println("*** Remove Node 20");
-        // tree.remove(20);
-        // tree.printTree(4);
-        // System.out.println("*** Remove Node 19");
-        // tree.remove(19);
-        // tree.printTree(4);
-        // System.out.println("*** Remove Node 8");
-        // tree.remove(8);
-        // tree.printTree(4);
-        // tree.printNodeDetails();
-        // System.out.println("*** Remove Node 5");
-        // tree.remove(5);
-        // tree.printTree(4);
-        // tree.printNodeDetails();
-        // System.out.println("*** Remove Node 1");
-        // tree.remove(1);
-        // tree.printTree(5);
-        // tree.printNodeDetails();
-        // System.out.println("*** Remove Node 3");
-        // tree.remove(3);
-        // tree.printTree(5);
-        // tree.printNodeDetails();
-        // System.out.println("*** Remove Node 11");
-        // tree.remove(11);
-        // tree.printTree(5);
-        // tree.printNodeDetails();
-        // System.out.println("*** Add Node 10000");
-        // tree.addNode(10000);
-        // tree.printTree(5);
-        // tree.printNodeDetails();
-        // System.out.println("*** Remove Node 2");
-        // tree.remove(2);
-        // tree.printTree(5);
-        // tree.printNodeDetails();
-        // System.out.println("*** Remove Node 16");
-        // tree.remove(16);
-        // tree.printTree(5);
-        // tree.printNodeDetails();
-        // System.out.println("*** Remove Node 10000");
-        // tree.remove(10000);
-        // tree.printTree(5);
-        // tree.printNodeDetails();
-        // System.out.println("*** Remove Node 17");
-        // tree.remove(17);
-        // tree.printTree(5);
-        // tree.printNodeDetails();
-        // System.out.println("*** Remove Node 15");
-        // tree.remove(15);
-        // tree.printTree(5);
-        // tree.printNodeDetails();
-        // System.out.println("*** Remove Node 7");
-        // tree.remove(7);
-        // tree.printTree(5);
-        // tree.printNodeDetails();
-        // System.out.println("*** Remove Node 12");
-        // tree.remove(12);
-        // tree.printTree(5);
-        // tree.printNodeDetails();
-        // System.out.println("*** Remove Node 18");
-        // tree.remove(18);
-        // tree.printTree(5);
-        // tree.printNodeDetails();
-        // System.out.println("*** Remove Node 6");
-        // tree.remove(6);
-        // tree.printTree(5);
-        // tree.printNodeDetails();
-        // System.out.println("*** Remove Node 4");
-        // tree.remove(4);
-        // tree.printTree(5);
-        // tree.printNodeDetails();
-        // System.out.println("*** Remove Node 13");
-        // tree.remove(13);
-        // tree.printTree(5);
-        // tree.printNodeDetails();
-        // System.out.println("*** Remove Node 14");
-        // tree.remove(14);
-        // tree.printTree(5);
-        // tree.printNodeDetails();
-        // System.out.println("*** Remove Node 9");
-        // tree.remove(9);
-        // tree.printTree(5);
-        // tree.printNodeDetails();
-        // System.out.println("*** Remove Node 10");
-        // tree.remove(10);
-        // tree.printTree(5);
-        // tree.printNodeDetails();
-        // System.out.println("*** Add Node 10000");
-        // tree.addNode(10000);
-        // tree.printTree(5);
-        // tree.printNodeDetails();
+        DstructsBinaryTree<Object> tree = new DstructsBinaryTree<Object>();
+        tree.addNode(1);
+        tree.addNode(2);
+        tree.addNode(3);
+        tree.addNode(4);
+        tree.addNode(5);
+        tree.addNode(6);
+        tree.addNode("Hi");
+        tree.addNode(8.3);
+        tree.addNode(9);
+        tree.addNode(10);
+        tree.addNode(11);
+        tree.addNode(12);
+        tree.addNode(13.4);
+        tree.addNode(14);
+        tree.addNode(15);
+        tree.addNode(16);
+        tree.addNode(17);
+        tree.addNode("18");
+        tree.addNode(19);
+        tree.addNode(20);
+        tree.printTree(4);
 
-        while (true) {
-            System.out.println("Howdy");
-            try {
-                Thread.sleep(1000);
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-        }
+        System.out.println("*** Remove Node 'Hi'");
+        tree.remove("Hi");
+        tree.printTree(4);
+        System.out.println("*** Remove Node '18'");
+        tree.remove("18");
+        tree.printTree(4);
+        System.out.println("*** Remove Node 8");
+        tree.remove(8);
+        tree.printTree(4);
+        tree.printNodeDetails();
+        System.out.println("*** Remove Node 5");
+        tree.remove(5);
+        tree.printTree(4);
+        tree.printNodeDetails();
+        System.out.println("*** Remove Node 1");
+        tree.remove(1);
+        tree.printTree(5);
+        tree.printNodeDetails();
+        System.out.println("*** Remove Node 3");
+        tree.remove(3);
+        tree.printTree(5);
+        tree.printNodeDetails();
+        System.out.println("*** Remove Node 11");
+        tree.remove(11);
+        tree.printTree(5);
+        tree.printNodeDetails();
+        System.out.println("*** Add Node 10000");
+        tree.addNode(10000);
+        tree.printTree(5);
+        tree.printNodeDetails();
+        System.out.println("*** Remove Node 2");
+        tree.remove(2);
+        tree.printTree(5);
+        tree.printNodeDetails();
+        System.out.println("*** Remove Node 16");
+        tree.remove(16);
+        tree.printTree(5);
+        tree.printNodeDetails();
+        System.out.println("*** Remove Node 10000");
+        tree.remove(10000);
+        tree.printTree(5);
+        tree.printNodeDetails();
+        System.out.println("*** Remove Node 17");
+        tree.remove(17);
+        tree.printTree(5);
+        tree.printNodeDetails();
+        System.out.println("*** Remove Node 15");
+        tree.remove(15);
+        tree.printTree(5);
+        tree.printNodeDetails();
+        System.out.println("*** Remove Node 7");
+        tree.remove(7);
+        tree.printTree(5);
+        tree.printNodeDetails();
+        System.out.println("*** Remove Node 12");
+        tree.remove(12);
+        tree.printTree(5);
+        tree.printNodeDetails();
+        System.out.println("*** Remove Node 18");
+        tree.remove(18);
+        tree.printTree(5);
+        tree.printNodeDetails();
+        System.out.println("*** Remove Node 6");
+        tree.remove(6);
+        tree.printTree(5);
+        tree.printNodeDetails();
+        System.out.println("*** Remove Node 4");
+        tree.remove(4);
+        tree.printTree(5);
+        tree.printNodeDetails();
+        System.out.println("*** Remove Node 13");
+        tree.remove(13);
+        tree.printTree(5);
+        tree.printNodeDetails();
+        System.out.println("*** Remove Node 14");
+        tree.remove(14);
+        tree.printTree(5);
+        tree.printNodeDetails();
+        System.out.println("*** Remove Node 9");
+        tree.remove(9);
+        tree.printTree(5);
+        tree.printNodeDetails();
+        System.out.println("*** Remove Node 10");
+        tree.remove(10);
+        tree.printTree(5);
+        tree.printNodeDetails();
+        System.out.println("*** Add Node 10000");
+        tree.addNode(10000);
+        tree.printTree(5);
+        tree.printNodeDetails();
+
+        // while (true) {
+        //     System.out.println("Howdy");
+        //     try {
+        //         Thread.sleep(1000);
+        //     } catch (Exception e) {
+        //         System.out.println(e);
+        //     }
+        // }
 
 
     }
