@@ -3,7 +3,7 @@
 A binary tree data structure is modeled so that each node has at most two children referred to as the 
 left and right child.
 
-The contents within this directory are implementations of the linked list data structure.  Each language 
+The contents within this directory are implementations of the binary tree data structure.  Each language 
 will build the data structure for three data types.
 1. Integer
 2. Double (Floating Point) 
